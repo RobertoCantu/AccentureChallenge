@@ -1,3 +1,4 @@
+import { PrismaClient } from '@prisma/client';
 import express, { Application, Request, Response } from 'express';
 
 const app: Application = express();
@@ -35,8 +36,32 @@ const uploadFile = () => {
   };
 
   uploadFile();
+const prisma = new PrismaClient();
+
 app.get('/index', (req: Request, res: Response) => {
     res.send('Server running...');
+});
+
+app.get('/test_create', async (req: Request, res: Response) => {
+    const test_email = 'test_user@mail.com';
+    const user_query = await prisma.user.findUnique({
+        where: {
+            email: test_email,
+        },
+    });
+
+    if (!user_query) {
+        await prisma.user.create({
+            data: {
+                email: test_email,
+                name: 'Test User',
+            },
+        });
+
+        res.status(200).send('Test user was created.');
+    } else {
+        res.status(200).send('Test user already exists.');
+    }
 });
 
 app.listen(port, function () {

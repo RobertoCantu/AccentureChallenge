@@ -8,8 +8,19 @@
     npm install
     ```
 
-2. Iniciar el servidor
+2. Crear un archivo `.env` siguiendo los requisitos en el archivo `.env.example`:
+    - Agregar la string de conexión de Mongo en `DATABASE_URL`
+
+3. Iniciar el servidor
 
     ```bash
     npm run dev
     ```
+
+### Actualización del esquema de mongo
+
+Si se hacen cambios en el esquema de la base de datos (archivos en `prisma/`), se tiene que ejecutar el comando:
+
+```bash
+prisma generate
+```
