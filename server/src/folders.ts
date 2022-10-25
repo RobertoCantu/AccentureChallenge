@@ -48,8 +48,10 @@ export async function deleteFolder(folderId: string): Promise<Folder> {
     });
 
     if (toDelete) {
-        toDelete.files.forEach((file) => deleteObject(file.resourceUrl));
-        toDelete.children.forEach((child) => deleteFolder(child.id));
+        await Promise.all([
+            ...toDelete.files.map((file) => deleteObject(file.resourceUrl)),
+            ...toDelete.children.map((child) => deleteFolder(child.id)),
+        ]);
     }
 
     const deleted = await prismaClient.folder.delete({

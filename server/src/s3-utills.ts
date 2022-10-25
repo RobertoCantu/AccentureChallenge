@@ -16,7 +16,7 @@ export const s3 = new S3({
 });
 
 export function deleteObject(key: string) {
-    s3.deleteObject({
+    return s3.deleteObject({
         Bucket: MAIN_BUCKET,
         Key: key,
     });

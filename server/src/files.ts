@@ -37,7 +37,7 @@ export async function deleteFile(fileId: string): Promise<File> {
         },
     });
 
-    deleteObject(deleted.resourceUrl);
+    await deleteObject(deleted.resourceUrl);
 
     return deleted;
 }
@@ -58,7 +58,7 @@ export async function updateFile(
     });
 
     if (origin?.resourceUrl && origin.resourceUrl != created.resourceUrl) {
-        deleteObject(origin.resourceUrl);
+        await deleteObject(origin.resourceUrl);
     }
 
     return created;
