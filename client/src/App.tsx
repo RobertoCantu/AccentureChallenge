@@ -4,7 +4,7 @@ import './App.css';
 
 function App() {
     useEffect(() => {
-        fetch('/index').then(console.log);
+        fetch('http://localhost:3001/index').then(console.log);
     }, []);
     return (
         <div className="App">
