@@ -4,16 +4,15 @@ import cors from 'cors';
 import fs from 'fs';
 import AWS from 'aws-sdk';
 import * as dotenv from 'dotenv';
+import { authRouter } from './auth/auth.router';
 
 const app: Application = express();
-const prisma = new PrismaClient();
 
 dotenv.config();
 
 const port: number = 3001;
 
-
-console.log(process.env.AWS_ACCESS_KEY);
+// console.log(process.env.AWS_ACCESS_KEY);
 
 const s3 = new AWS.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY,
@@ -45,30 +44,10 @@ app.use(
     })
 );
 
+app.use("/api/v1/auth/", authRouter);
+
 app.get('/index', (req: Request, res: Response) => {
     res.send('Server running...');
-});
-
-app.get('/test_create', async (req: Request, res: Response) => {
-    const test_email = 'test_user@mail.com';
-    const user_query = await prisma.user.findUnique({
-        where: {
-            email: test_email,
-        },
-    });
-
-    if (!user_query) {
-        await prisma.user.create({
-            data: {
-                email: test_email,
-                name: 'Test User',
-            },
-        });
-
-        res.status(200).send('Test user was created.');
-    } else {
-        res.status(200).send('Test user already exists.');
-    }
 });
 
 app.listen(port, function () {
