@@ -31,15 +31,15 @@ export async function getFile(fileId: string): Promise<File | null> {
 }
 
 export async function deleteFile(fileId: string): Promise<File> {
-    const created = await prismaClient.file.delete({
+    const deleted = await prismaClient.file.delete({
         where: {
             id: fileId,
         },
     });
 
-    deleteObject(created.resourceUrl);
+    deleteObject(deleted.resourceUrl);
 
-    return created;
+    return deleted;
 }
 
 export async function updateFile(

@@ -1,17 +1,17 @@
-import { PrismaClient, User } from '@prisma/client';
-import express, { Application, Request, Response } from 'express';
-import cors from 'cors';
 import * as dotenv from 'dotenv';
-import { s3FileUpload } from './multer';
-
-const app: Application = express();
-const prisma = new PrismaClient();
-
 dotenv.config();
 
-const port: number = 3001;
+import { PrismaClient } from '@prisma/client';
+import express, { Application, Request, Response, type Express } from 'express';
+import cors from 'cors';
+import { s3FileUpload } from './middleware/multer';
+import { prismaClient } from './prisma';
+import multerS3 from 'multer-s3';
 
-console.log(process.env.AWS_ACCESS_KEY);
+const app: Application = express();
+// const prisma = new PrismaClient();
+
+const port: number = 3001;
 
 app.use(
     cors({
@@ -24,12 +24,18 @@ app.get('/index', (req: Request, res: Response) => {
 });
 
 app.post('/test_file', s3FileUpload.single('note'), (req, res) => {
+    const file = req.file as Express.MulterS3.File;
+    if (file) {
+        const { bucket, key } = file;
+        console.log(bucket, key);
+    }
+
     res.send(200);
 });
 
 app.get('/test_create', async (req: Request, res: Response) => {
     const test_email = 'test_user@mail.com';
-    const user_query = await prisma.user.findUnique({
+    const user_query = await prismaClient.user.findUnique({
         where: {
             email: test_email,
         },
