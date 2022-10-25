@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import fs from 'fs';
@@ -11,6 +11,7 @@ const prisma = new PrismaClient();
 dotenv.config();
 
 const port: number = 3001;
+
 
 console.log(process.env.AWS_ACCESS_KEY);
 
