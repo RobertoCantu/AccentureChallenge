@@ -36,7 +36,7 @@ const uploadFile = () => {
     });
 };
 
-uploadFile();
+// uploadFile();
 
 app.use(
     cors({
