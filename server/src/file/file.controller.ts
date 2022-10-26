@@ -48,9 +48,9 @@ export const createFileController = async (
             key
         );
         if (createdFile.id) res.sendStatus(200);
-        res.sendStatus(500);
+        return res.sendStatus(500);
     } catch (error) {
-        res.status(500).send(error);
+        return res.status(500).send(error);
     }
 };
 

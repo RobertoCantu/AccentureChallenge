@@ -6,7 +6,7 @@ export const isAuthenticated = (
     next: NextFunction
 ) => {
     req.user = {
-        id: '63595c5411c211b76ce790d4',
+        id: '6359925df824bbcd1cb2934a',
     };
     next();
 };
