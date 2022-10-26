@@ -1,42 +1,18 @@
-import { PrismaClient, User } from '@prisma/client';
-import express, { Application, Request, Response } from 'express';
-import cors from 'cors';
-import fs from 'fs';
-import AWS from 'aws-sdk';
 import * as dotenv from 'dotenv';
+dotenv.config();
+
+import { PrismaClient } from '@prisma/client';
+import express, { Application, Request, Response, type Express } from 'express';
+import cors from 'cors';
+import { s3FileUpload } from './middleware/multer';
+import { prismaClient } from './prisma';
+import multerS3 from 'multer-s3';
 import { authRouter } from './auth/auth.router';
 
 const app: Application = express();
-
-dotenv.config();
+// const prisma = new PrismaClient();
 
 const port: number = 3001;
-
-// console.log(process.env.AWS_ACCESS_KEY);
-
-const s3 = new AWS.S3({
-    accessKeyId: process.env.AWS_ACCESS_KEY,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-});
-
-const fileName = 'test.txt';
-
-const uploadFile = () => {
-    fs.readFile(fileName, (err, data) => {
-        if (err) throw err;
-        const params = {
-            Bucket: 'accenturechallengetec', // pass your bucket name
-            Key: 'test.txt', // file will be saved as testBucket/contacts.csv
-            Body: JSON.stringify(data, null, 2),
-        };
-        s3.upload(params, function (s3Err: any, data: any) {
-            if (s3Err) throw s3Err;
-            console.log(`File uploaded successfully at ${data.Location}`);
-        });
-    });
-};
-
-// uploadFile();
 
 app.use(
     cors({
@@ -48,6 +24,38 @@ app.use("/api/v1/auth/", authRouter);
 
 app.get('/index', (req: Request, res: Response) => {
     res.send('Server running...');
+});
+
+app.post('/test_file', s3FileUpload.single('note'), (req, res) => {
+    const file = req.file as Express.MulterS3.File;
+    if (file) {
+        const { bucket, key } = file;
+        console.log(bucket, key);
+    }
+
+    res.send(200);
+});
+
+app.get('/test_create', async (req: Request, res: Response) => {
+    const test_email = 'test_user@mail.com';
+    const user_query = await prismaClient.user.findUnique({
+        where: {
+            email: test_email,
+        },
+    });
+
+    if (!user_query) {
+        // await prisma.user.create({
+        //     data: {
+        //         email: test_email,
+        //         name: 'Test User',
+        //     },
+        // });
+
+        res.status(200).send('Test user was created.');
+    } else {
+        res.status(200).send('Test user already exists.');
+    }
 });
 
 app.listen(port, function () {
