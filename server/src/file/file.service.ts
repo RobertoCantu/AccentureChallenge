@@ -44,12 +44,12 @@ export const deleteFile = async (fileId: string): Promise<File> => {
 
 export const updateFile = async (
     fileId: string,
-    data: Partial<File>
+    data: Partial<Omit<File, 'id'>>
 ): Promise<File> => {
     const origin = await getFile(fileId);
     const created = await db.file.update({
         where: {
-            id: data.id,
+            id: fileId,
         },
         data: {
             ...origin,

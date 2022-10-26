@@ -1,9 +1,9 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import express, { Application, Request, Response, type Express } from 'express';
+import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
-import { s3FileUpload } from './middleware/multer';
+import { multerMiddleware } from './middleware/multer';
 import { db } from './utils/db.server';
 import { authRouter } from './auth/auth.router';
 
@@ -16,6 +16,8 @@ app.use(
         origin: '*',
     })
 );
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/v1/auth/', authRouter);
 
@@ -23,7 +25,8 @@ app.get('/index', (req: Request, res: Response) => {
     res.send('Server running...');
 });
 
-app.post('/test_file', s3FileUpload.single('note'), (req, res) => {
+app.post('/test_file', multerMiddleware.single('note'), (req, res) => {
+    console.log(req.body);
     const file = req.file as Express.MulterS3.File;
     if (file) {
         const { bucket, key } = file;
