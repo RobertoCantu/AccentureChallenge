@@ -1,16 +1,13 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import { PrismaClient } from '@prisma/client';
 import express, { Application, Request, Response, type Express } from 'express';
 import cors from 'cors';
 import { s3FileUpload } from './middleware/multer';
-import { prismaClient } from './prisma';
-import multerS3 from 'multer-s3';
+import { db } from './utils/db.server';
 import { authRouter } from './auth/auth.router';
 
 const app: Application = express();
-// const prisma = new PrismaClient();
 
 const port: number = 3001;
 
@@ -20,7 +17,7 @@ app.use(
     })
 );
 
-app.use("/api/v1/auth/", authRouter);
+app.use('/api/v1/auth/', authRouter);
 
 app.get('/index', (req: Request, res: Response) => {
     res.send('Server running...');
@@ -38,7 +35,7 @@ app.post('/test_file', s3FileUpload.single('note'), (req, res) => {
 
 app.get('/test_create', async (req: Request, res: Response) => {
     const test_email = 'test_user@mail.com';
-    const user_query = await prismaClient.user.findUnique({
+    const user_query = await db.user.findUnique({
         where: {
             email: test_email,
         },

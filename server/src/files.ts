@@ -1,6 +1,6 @@
 import { File } from '@prisma/client';
-import { prismaClient } from './prisma';
-import { deleteObject } from './s3-utills';
+import { db } from './utils/db.server';
+import { deleteObject } from './utils/s3-utills';
 
 export async function createFile(
     name: string,
@@ -8,7 +8,7 @@ export async function createFile(
     folderId: string,
     s3Path: string
 ): Promise<File> {
-    const created = await prismaClient.file.create({
+    const created = await db.file.create({
         data: {
             name,
             userId,
@@ -21,7 +21,7 @@ export async function createFile(
 }
 
 export async function getFile(fileId: string): Promise<File | null> {
-    const entry = await prismaClient.file.findUnique({
+    const entry = await db.file.findUnique({
         where: {
             id: fileId,
         },
@@ -31,7 +31,7 @@ export async function getFile(fileId: string): Promise<File | null> {
 }
 
 export async function deleteFile(fileId: string): Promise<File> {
-    const deleted = await prismaClient.file.delete({
+    const deleted = await db.file.delete({
         where: {
             id: fileId,
         },
@@ -47,7 +47,7 @@ export async function updateFile(
     data: Partial<File>
 ): Promise<File> {
     const origin = await getFile(fileId);
-    const created = await prismaClient.file.update({
+    const created = await db.file.update({
         where: {
             id: data.id,
         },
