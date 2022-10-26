@@ -5,19 +5,28 @@ import { deleteObject, getObjectUrl } from '../utils/s3-utills';
 import * as FileService from './file.service';
 
 const validateFileToUser = async (fileId: string, req: Request) => {
-    new Promise(async (resolve, reject) => {
-        if (!req.user) return reject((res: Response) => res.sendStatus(400));
+    return new Promise(
+        async (
+            resolve: (f: File) => void,
+            reject: (cb: (res: Response) => void) => void
+        ) => {
+            if (!req.user)
+                return reject((res: Response) => res.sendStatus(400));
 
-        const foundFile = await FileService.getFile(fileId);
-        if (!foundFile) return reject((res: Response) => res.sendStatus(404));
+            const foundFile = await FileService.getFile(fileId);
+            if (!foundFile)
+                return reject((res: Response) => res.sendStatus(404));
 
-        if (foundFile.userId != req.user.id)
-            return reject((res: Response) =>
-                res.status(400).send('File does not belong to current user.')
-            );
+            if (foundFile.userId != req.user.id)
+                return reject((res: Response) =>
+                    res
+                        .status(400)
+                        .send('File does not belong to current user.')
+                );
 
-        return resolve(foundFile);
-    });
+            return resolve(foundFile);
+        }
+    );
 };
 
 export const createFileController = async (req: Request, res: Response) => {

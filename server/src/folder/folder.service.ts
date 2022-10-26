@@ -5,7 +5,7 @@ import { deleteObject } from '../utils/s3-utills';
 export const createFolder = async (
     name: string,
     userId: string,
-    parentId: string
+    parentId: string | null
 ): Promise<Folder> => {
     const created = await db.folder.create({
         data: {
@@ -19,6 +19,7 @@ export const createFolder = async (
 };
 
 export const getFolder = async (folderId: string): Promise<Folder | null> => {
+    console.log('FOLDER ID', folderId);
     const entry = await db.folder.findUnique({
         where: {
             id: folderId,
@@ -85,13 +86,11 @@ export const updateFolder = async (
     folderId: string,
     data: Partial<Folder>
 ): Promise<Folder> => {
-    const origin = await getFolder(folderId);
     const created = await db.folder.update({
         where: {
             id: folderId,
         },
         data: {
-            ...origin,
             ...data,
         },
     });

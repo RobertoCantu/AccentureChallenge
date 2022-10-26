@@ -27,10 +27,14 @@ const validateFolderToUser = async (folderId: string, req: Request) => {
 };
 
 export const createFolderController = async (
-    req: Request<{}, {}, { name: string; parentId: string }>,
+    req: Request<{}, {}, { name: string; parentId?: string }>,
     res: Response
 ) => {
     if (!req.user) return res.sendStatus(400);
+    if (!req.body.parentId) {
+        await FolderService.createFolder(req.body.name, req.user.id, null);
+        return res.sendStatus(200);
+    }
     const { name, parentId } = req.body;
 
     const folder = await validateFolderToUser(parentId, req)
@@ -98,12 +102,15 @@ export const updateFolderController = async (
     res: Response<Folder>
 ) => {
     if (!req.user) return res.sendStatus(400);
+    console.log('PARAMS', req.params);
+    console.log('QUERT', req.query);
     const { folderId } = req.params;
+    const { folder } = req.body;
 
-    const folder = await validateFolderToUser(folderId, req)
+    const currentFolder = await validateFolderToUser(folderId, req)
         .then((folder) => folder)
         .catch((err) => err(res));
-    if (!folder) return;
+    if (!currentFolder) return;
 
     await FolderService.updateFolder(folderId, folder);
 

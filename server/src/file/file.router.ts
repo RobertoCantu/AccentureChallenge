@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { isAuthenticated } from '../middleware/auth';
 import { multerMiddleware } from '../middleware/multer';
 import {
     createFileController,
@@ -8,7 +9,9 @@ import {
     updateFileController,
 } from './file.controller';
 
-const fileRouter = Router();
+export const fileRouter = Router();
+
+fileRouter.use(isAuthenticated);
 
 fileRouter
     .route('/')
