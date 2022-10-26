@@ -24,6 +24,7 @@ function MuiDrawer() {
 		<Drawer 
 			anchor='left'
 			variant='permanent'
+			sx={{width:'280px'}}
 			PaperProps={{
 				sx: { width: DRAWER_WIDTH },
 			}}
@@ -45,7 +46,6 @@ function MuiDrawer() {
 				</List>
 				<Divider />
 			</Box>
-
 			</Drawer>
 	</RootStyle>
   
