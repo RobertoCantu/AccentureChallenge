@@ -31,7 +31,7 @@ function DashboardNavbar() {
 	
   return (
 		
-    <AppBar  position="fixed" sx={{width: `calc(100% - ${DRAWER_WIDTH}px)`}}>
+    <AppBar  position="fixed" sx={{ width: `calc(100% - ${DRAWER_WIDTH}px)`, ml: `${DRAWER_WIDTH}px` }}>
 			<Container>
 				<Toolbar disableGutters>
 					<Typography
