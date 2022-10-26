@@ -5,11 +5,25 @@ import { Outlet } from 'react-router-dom';
 import { styled, useTheme, Container, Box, AppBar, Toolbar, Typography, Menu, MenuItem, IconButton, } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
+import * as React from 'react';
+import Drawer from '@mui/material/Drawer';
+import CssBaseline from '@mui/material/CssBaseline';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import MailIcon from '@mui/icons-material/Mail';
+
 // Components
 import DashboardSidebar from './DashboardSidebar';
 import DashboardNavbar from './DashboardNavbar';
 import { margin } from '@mui/system';
 import { ClassNames } from '@emotion/react';
+import TestNavBar from './testNavBar';
+import TestSidebar from './testSidebar';
 
 const RootStyle = styled('div')({
   display: 'flex',
@@ -18,16 +32,21 @@ const RootStyle = styled('div')({
   //overflow: 'hidden'
 });
 
+const DRAWER_WIDTH = 280;
+const drawerWidth = 240;
+
+
+
 const MainStyle = styled('div')(({ theme }) => ({
   flexGrow: 1,
   overflow: 'auto',
   minHeight: '100%',
   paddingTop: theme.spacing(12),
   paddingBottom: theme.spacing(8),
-  paddingLeft: theme.spacing(8),
+  paddingLeft: theme.spacing(2),
   paddingRight: theme.spacing(2),
-	background: 'red',
-	border: 'solid'
+	// marginLeft: '180px',
+	//width: `calc(100% - ${DRAWER_WIDTH}px)`
 }));
 
 const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
@@ -39,29 +58,12 @@ export default function DashboardLayout() {
     //const { collapseClick } = useCollapseDrawer();
   
     return (
-    <Box sx={{display:'flex'}}>
-			<DashboardSidebar/> 
-       <DashboardNavbar/>
-			 {/* <div style={{'background': 'red', 'width': '100%'}}>Holaa</div>
-			 <div style={{'background': 'blue', }}>Holaa2222</div> */}
-      {/* <Container maxWidth="xl" sx={{background:'red'}}> */}
-			<Offset>
-			<MainStyle
-          sx={{
-            transition: theme.transitions.create('margin', {
-              duration: theme.transitions.duration.complex
-            }),
-						// flex:1
-            // ...(collapseClick && {
-            //   ml: '102px'
-            // })
-          }}
-        >
-          <Outlet />
-        </MainStyle>
-			</Offset>
-         
-       {/* </Container> */}
-    </Box>
+			<Box sx={{display:'flex'}}>
+				<DashboardNavbar/>
+				<DashboardSidebar/>
+			<MainStyle>
+				<Outlet/>
+			</MainStyle>
+			</Box>
     );
   }

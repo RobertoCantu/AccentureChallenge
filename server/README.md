@@ -22,5 +22,5 @@
 Si se hacen cambios en el esquema de la base de datos (archivos en `prisma/`), se tiene que ejecutar el comando:
 
 ```bash
-prisma generate
+npx prisma generate
 ```

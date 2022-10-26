@@ -15,6 +15,7 @@ import MailIcon from '@mui/icons-material/Mail';
 const DRAWER_WIDTH = 280;
 
 const RootStyle = styled('div')(({ theme }) => ({
+	
 }));
 
 function MuiDrawer() {
@@ -22,14 +23,17 @@ function MuiDrawer() {
 
 	<RootStyle>
 		<Drawer 
-			anchor='left'
-			variant='permanent'
-			sx={{width:'280px'}}
-			PaperProps={{
-				sx: { width: DRAWER_WIDTH },
+			sx={{
+				width: DRAWER_WIDTH,
+				flexShrink: 0,
+				'& .MuiDrawer-paper': {
+					width: DRAWER_WIDTH,
+					boxSizing: 'border-box',
+				},
 			}}
+			variant="permanent"
+			anchor="left"
 		>
-			<Box>
 			<Toolbar />
 				<Divider />
 				<List>
@@ -45,7 +49,6 @@ function MuiDrawer() {
 					))}
 				</List>
 				<Divider />
-			</Box>
 			</Drawer>
 	</RootStyle>
   
