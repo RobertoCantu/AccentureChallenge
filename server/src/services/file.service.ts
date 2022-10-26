@@ -1,13 +1,13 @@
 import { File } from '@prisma/client';
-import { db } from './utils/db.server';
-import { deleteObject } from './utils/s3-utills';
+import { db } from '../utils/db.server';
+import { deleteObject } from '../utils/s3-utills';
 
-export async function createFile(
+export const createFile = async (
     name: string,
     userId: string,
     folderId: string,
     s3Path: string
-): Promise<File> {
+): Promise<File> => {
     const created = await db.file.create({
         data: {
             name,
@@ -18,9 +18,9 @@ export async function createFile(
     });
 
     return created;
-}
+};
 
-export async function getFile(fileId: string): Promise<File | null> {
+export const getFile = async (fileId: string): Promise<File | null> => {
     const entry = await db.file.findUnique({
         where: {
             id: fileId,
@@ -28,9 +28,9 @@ export async function getFile(fileId: string): Promise<File | null> {
     });
 
     return entry;
-}
+};
 
-export async function deleteFile(fileId: string): Promise<File> {
+export const deleteFile = async (fileId: string): Promise<File> => {
     const deleted = await db.file.delete({
         where: {
             id: fileId,
@@ -40,12 +40,12 @@ export async function deleteFile(fileId: string): Promise<File> {
     await deleteObject(deleted.resourceUrl);
 
     return deleted;
-}
+};
 
-export async function updateFile(
+export const updateFile = async (
     fileId: string,
     data: Partial<File>
-): Promise<File> {
+): Promise<File> => {
     const origin = await getFile(fileId);
     const created = await db.file.update({
         where: {
@@ -62,4 +62,4 @@ export async function updateFile(
     }
 
     return created;
-}
+};
