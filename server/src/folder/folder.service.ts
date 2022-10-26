@@ -27,6 +27,24 @@ export const getFolder = async (folderId: string): Promise<Folder | null> => {
     return entry;
 };
 
+export const getUserFolders = async (
+    userId: string,
+    parentId: string | undefined
+): Promise<Folder[]> => {
+    const whereQuery = parentId
+        ? {
+              parentId,
+              userId,
+          }
+        : { userId };
+
+    const entries = await db.folder.findMany({
+        where: whereQuery,
+    });
+
+    return entries;
+};
+
 export const deleteFolder = async (folderId: string): Promise<Folder> => {
     const toDelete = await db.folder.findUnique({
         where: {
