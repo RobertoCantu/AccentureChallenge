@@ -5,7 +5,6 @@ export const isAuthenticated = (
     res: Response,
     next: NextFunction
 ) => {
-    console.log('HOD', req.body);
     req.user = {
         id: '63595c5411c211b76ce790d4',
     };

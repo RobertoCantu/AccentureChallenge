@@ -16,7 +16,10 @@ fileRouter.use(isAuthenticated);
 fileRouter
     .route('/')
     .get(getUserFilesController)
-    .post(multerMiddleware.single('note'), createFileController)
+    .post(multerMiddleware.single('note'), createFileController);
+
+fileRouter
+    .route('/:fileId')
     .put(updateFileController)
     .delete(deleteFileController);
 

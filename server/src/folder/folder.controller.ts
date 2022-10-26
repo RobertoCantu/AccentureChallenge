@@ -98,12 +98,10 @@ export const deleteFolderController = async (
 };
 
 export const updateFolderController = async (
-    req: Request<{ folderId: string }, {}, { folder: Partial<File> }>,
+    req: Request<{ folderId: string }, {}, { folder: Partial<Folder> }>,
     res: Response<Folder>
 ) => {
     if (!req.user) return res.sendStatus(400);
-    console.log('PARAMS', req.params);
-    console.log('QUERT', req.query);
     const { folderId } = req.params;
     const { folder } = req.body;
 
@@ -111,7 +109,8 @@ export const updateFolderController = async (
         .then((folder) => folder)
         .catch((err) => err(res));
     if (!currentFolder) return;
-
+    
+    if ('id' in folder) delete folder['id'];
     await FolderService.updateFolder(folderId, folder);
 
     res.sendStatus(200);

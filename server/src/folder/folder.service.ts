@@ -19,7 +19,6 @@ export const createFolder = async (
 };
 
 export const getFolder = async (folderId: string): Promise<Folder | null> => {
-    console.log('FOLDER ID', folderId);
     const entry = await db.folder.findUnique({
         where: {
             id: folderId,

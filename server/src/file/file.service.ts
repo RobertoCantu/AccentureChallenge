@@ -46,13 +46,20 @@ export const updateFile = async (
     fileId: string,
     data: Partial<Omit<File, 'id'>>
 ): Promise<File> => {
-    const origin = await getFile(fileId);
+    const origin = await db.file.findUnique({
+        where: {
+            id: fileId,
+        },
+        select: {
+            resourceUrl: true,
+        },
+    });
+    
     const created = await db.file.update({
         where: {
             id: fileId,
         },
         data: {
-            ...origin,
             ...data,
         },
     });

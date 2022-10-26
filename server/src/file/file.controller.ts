@@ -29,15 +29,16 @@ const validateFileToUser = async (fileId: string, req: Request) => {
     );
 };
 
-export const createFileController = async (req: Request, res: Response) => {
+export const createFileController = async (
+    req: Request<{}, {}, { name: string; folderId: string }>,
+    res: Response
+) => {
     if (!req.user) return res.send(400);
     const file = req.file as Express.MulterS3.File;
     if (!file) res.sendStatus(500);
 
     const { key } = file;
-
-    const fileName = req.body['name'];
-    const folderId = req.body['folderId'];
+    const { name: fileName, folderId } = req.body;
 
     try {
         const createdFile = await FileService.createFile(
