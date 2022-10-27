@@ -2,7 +2,7 @@ import { useRoutes, Navigate } from "react-router-dom";
 
 // Components
 import MuiDrawer from "../layouts/DashboardSidebar";
-import FileCards from "../components/Files/FileCards";
+import FileList from "../components/Files/FileList";
 import Login from "../components/formLogin";
 import Register from "../components/formRegistro";
 
@@ -51,7 +51,7 @@ export default function Router() {
 			),
 			children: [
 				// { path: '/dashboard', element: <RidesList /> },
-				{ path: "test", element: <FileCards /> },
+				{ path: "test", element: <FileList /> },
 				// { path: 'profile', element: <UserDetails /> },
 				// { path: 'rides/:rideId', element: <RideDetails /> },
 				// { path: 'rides/edit/:rideId', element: <AddRoute mainText='Modifica tu ruta' secondaryText='Modifica los siguientes datos para actualizar tu ruta' /> },

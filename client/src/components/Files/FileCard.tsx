@@ -5,7 +5,11 @@ import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import { Button, CardActionArea, CardActions } from "@mui/material";
 
-function FileCards() {
+interface CardType {
+	name: string;
+}
+
+function FileCard({ name }: CardType) {
 	return (
 		<Card sx={{ maxWidth: 345 }}>
 			<CardActionArea>
@@ -17,7 +21,7 @@ function FileCards() {
 				/>
 				<CardContent>
 					<Typography gutterBottom variant="h5" component="div">
-						Lizard
+						{name}
 					</Typography>
 					<Typography variant="body2" color="text.secondary">
 						Lizards are a widespread group of squamate reptiles, with over 6,000
@@ -34,4 +38,4 @@ function FileCards() {
 	);
 }
 
-export default FileCards;
+export default FileCard;
