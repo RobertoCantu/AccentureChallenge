@@ -57,7 +57,7 @@ const Formulario = () => {
                             )}/>
                         </div>
                         <div>
-                            <label htmlFor='contraseña'>contraseña</label>
+                            <label htmlFor='contraseña'>Contraseña</label>
                             <Field
                                 type="text" 
                                 id='contraseña' 
