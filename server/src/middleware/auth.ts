@@ -7,7 +7,7 @@ export const isAuthenticated = async (request: Request, response: Response, next
 
         if(token) {
             const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET as string);
-            request.user = (<any>decodedToken).userId;
+            request.user = {id: (<any>decodedToken).userId};
             next();
         } else {
             response.status(404).send("Token de acceso inválido");
