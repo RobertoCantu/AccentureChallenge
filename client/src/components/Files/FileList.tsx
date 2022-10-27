@@ -3,15 +3,23 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import FileCard from "./FileCard";
 
+// Hooks
+import { useFolder } from "../../hooks/useFolder";
+
 function FileList() {
 	// File array
 	const files = [{ name: "File 1" }, { name: "File2" }];
+
+	const { error, currentFolder } = useFolder();
+	console.log("errror", error);
+	console.log(currentFolder);
+
 	return (
 		<Box sx={{ flexGrow: 1 }}>
 			<Grid container spacing={2}>
-				{files.map((file) => {
+				{files.map((file, index) => {
 					return (
-						<Grid item xs={4}>
+						<Grid key={index} item xs={4}>
 							<FileCard name={file.name} />
 						</Grid>
 					);
