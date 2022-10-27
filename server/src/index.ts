@@ -7,7 +7,7 @@ import cors from 'cors';
 import { s3FileUpload } from './middleware/multer';
 import { prismaClient } from './prisma';
 import multerS3 from 'multer-s3';
-import { authRouter } from './auth/auth.router';
+import { userRouter } from './user/user.router';
 
 const app: Application = express();
 // const prisma = new PrismaClient();
@@ -20,7 +20,9 @@ app.use(
     })
 );
 
-app.use("/api/v1/auth/", authRouter);
+app.use(express.json());
+
+app.use("/api/v1/user/", userRouter);
 
 app.get('/index', (req: Request, res: Response) => {
     res.send('Server running...');
