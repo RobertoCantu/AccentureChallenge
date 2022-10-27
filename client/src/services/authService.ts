@@ -3,7 +3,7 @@ import axios from "../utils/axios";
 
 export async function login(email: string, password: string) {
 	return new Promise(async (resolve, reject) => {
-		const url = "/api/v1/auth/login";
+		const url = "/api/v1/user/login";
 
 		try {
 			const response = await axios.post(url, {
@@ -20,17 +20,17 @@ export async function login(email: string, password: string) {
 export async function register(
 	email: string,
 	firstName: string,
-	lastname: string,
+	lastName: string,
 	password: string
 ) {
 	return new Promise(async (resolve, reject) => {
-		const url = "/auth/signup";
+		const url = "/api/v1/user/signup";
 
 		try {
 			const response = await axios.post(url, {
 				email,
 				firstName,
-				lastname,
+				lastName,
 				password,
 			});
 

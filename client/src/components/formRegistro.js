@@ -1,102 +1,158 @@
-import React, {useState} from 'react';
-import { Form, Formik, Field, ErrorMessage } from 'formik'
-import './logreg.css'
+import React, { useState } from "react";
+import { Form, Formik, Field, ErrorMessage } from "formik";
+import "./logreg.css";
+
+// Hooks
+import useAuth from "../hooks/useAuth";
 
 const Formulario = () => {
-    const [formularioEnviado, cambiarFormularioEnviado] = useState(false);
-    return (
-        <>
-            <h1>Registro</h1>
-            <div className='contenedor'>
-                <Formik
-                    initialValues={{
-                        nombre: '',
-                        correo: '',
-                        contraseña: ''
-                    }}
-                    validate={(valores) => {
-                        let errores = {};
-                        
-                        //Validación nombre
-                        if(!valores.nombre){
-                            errores.nombre = 'Por favor ingresa tu nombre'
-                        }else if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(valores.nombre)){
-                            errores.contraseña = 'El nombre solo puede contener letras y espacios'
-                        }
+	const [formularioEnviado, cambiarFormularioEnviado] = useState(false);
 
-                        //Validación contraseña
-                        if(!valores.contraseña){
-                            errores.contraseña = 'Por favor ingresa tu contraseña'
-                        }else if(!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/.test(valores.contraseña)){
-                            errores.contraseña = 'La contraseña debe contener entre 6 a 20 caracteres, tener una letra minúscula y una mayúscula'
-                        }
+	// Context
+	const context = useAuth();
+	const { register } = context;
 
-                        //Validación correo
-                        if(!valores.correo){
-                            errores.correo = 'Por favor ingresa tu correo'
-                        }else if(!/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(valores.correo)){
-                            errores.correo = 'El correo solo puede contener letras, números, puntos, guiones, guión bajo y @'
-                        }
+	return (
+		<>
+			<h1>Registro</h1>
+			<div className="contenedor">
+				<Formik
+					initialValues={{
+						nombre: "",
+						apellido: "",
+						correo: "",
+						contraseña: "",
+					}}
+					validate={(valores) => {
+						let errores = {};
 
-                        return errores;
-                    }}
-                    onSubmit={(valores, {resetForm}) => {
-                        resetForm();
-                        console.log('Formulario enviado');
-                        cambiarFormularioEnviado(true);
-                        setTimeout(() => cambiarFormularioEnviado(false), 3000);
-                    }}
-                >
+						//Validación nombre
+						if (!valores.nombre) {
+							errores.nombre = "Por favor ingresa tu nombre";
+						} else if (!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(valores.nombre)) {
+							errores.nombre =
+								"El nombre solo puede contener letras y espacios";
+						}
 
-                    {( {errors} ) => (
+						//Validación nombre
+						if (!valores.apellido) {
+							errores.apellido = "Por favor ingresa tu apellido";
+						} else if (!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(valores.apellido)) {
+							errores.apellido =
+								"Tu apellido solo puede contener letras y espacios";
+						}
 
-                        <Form className="formulario">
-                        {console.log(errors)}
-                        <div>
-                            <label htmlFor='nombre'>Nombre</label>
-                            <Field 
-                                type="text" 
-                                id='nombre' 
-                                name='nombre' 
-                                placeholder='Tu nombre' 
-                            />
-                            <ErrorMessage name="nombre" component={() => (
-                                <div className="error">{errors.nombre}</div>
-                            )}/>
-                        </div>
-                        <div>
-                            <label htmlFor='correo'>Correo</label>
-                            <Field 
-                                type="text" 
-                                id='correo' 
-                                name='correo' 
-                                placeholder='ejemplo@correo.com' 
-                            />
-                            <ErrorMessage name="correo" component={() => (
-                                <div className="error">{errors.correo}</div>
-                            )}/>
-                        </div>
-                        <div>
-                            <label htmlFor='contraseña'>contraseña</label>
-                            <Field
-                                type="text" 
-                                id='contraseña' 
-                                name='contraseña' 
-                                placeholder='Tu contraseña' 
-                            />
-                            <ErrorMessage name="contraseña" component={() => (
-                                <div className="error">{errors.contraseña}</div>
-                            )}/>
-                        </div>
-                        <button type='submit'>Enviar</button>
-                        {formularioEnviado && <p className='exito'>Formulario enviado con éxito</p>}
-                        <div>
-                            <p className='reg'>¿Ya tienes una cuenta? <a href=''>Inicia sesión</a></p>
-                        </div>
-                    </Form>
-                    )}
-                    
-                    {/* {( { values, errors, touched, handleSubmit, handleChange, handleBlur } ) => (
+						//Validación contraseña
+						if (!valores.contraseña) {
+							errores.contraseña = "Por favor ingresa tu contraseña";
+						} else if (
+							!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/.test(
+								valores.contraseña
+							)
+						) {
+							errores.contraseña =
+								"La contraseña debe contener entre 6 a 20 caracteres, tener una letra minúscula y una mayúscula";
+						}
+
+						//Validación correo
+						if (!valores.correo) {
+							errores.correo = "Por favor ingresa tu correo";
+						} else if (
+							!/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/.test(
+								valores.correo
+							)
+						) {
+							errores.correo =
+								"El correo solo puede contener letras, números, puntos, guiones, guión bajo y @";
+						}
+
+						return errores;
+					}}
+					onSubmit={(valores, { resetForm }) => {
+						try {
+							register(
+								valores.correo,
+								valores.nombre,
+								valores.apellido,
+								valores.contraseña
+							);
+						} catch (error) {
+							resetForm();
+						}
+					}}
+				>
+					{({ errors }) => (
+						<Form className="formulario">
+							{console.log(errors)}
+							<div>
+								<label htmlFor="nombre">Nombre</label>
+								<Field
+									type="text"
+									id="nombre"
+									name="nombre"
+									placeholder="Tu nombre"
+								/>
+								<ErrorMessage
+									name="nombre"
+									component={() => <div className="error">{errors.nombre}</div>}
+								/>
+							</div>
+							<div>
+								<label htmlFor="apellido">Apellido</label>
+								<Field
+									type="text"
+									id="apellido"
+									name="apellido"
+									placeholder="Tu apellido"
+								/>
+								<ErrorMessage
+									name="apellido"
+									component={() => (
+										<div className="error">{errors.apellido}</div>
+									)}
+								/>
+							</div>
+							<div>
+								<label htmlFor="correo">Correo</label>
+								<Field
+									type="text"
+									id="correo"
+									name="correo"
+									placeholder="ejemplo@correo.com"
+								/>
+								<ErrorMessage
+									name="correo"
+									component={() => <div className="error">{errors.correo}</div>}
+								/>
+							</div>
+							<div>
+								<label htmlFor="contraseña">Contraseña</label>
+								<Field
+									type="password"
+									id="contraseña"
+									name="contraseña"
+									placeholder="Tu contraseña"
+								/>
+								<ErrorMessage
+									name="contraseña"
+									component={() => (
+										<div className="error">{errors.contraseña}</div>
+									)}
+								/>
+							</div>
+							<button type="submit">Enviar</button>
+							{formularioEnviado && (
+								<p className="exito">Formulario enviado con éxito</p>
+							)}
+							<div>
+								<p className="reg">
+									¿Ya tienes una cuenta? <a href="/auth/login">Inicia sesión</a>
+								</p>
+							</div>
+						</Form>
+					)}
+
+					{/* {( { values, errors, touched, handleSubmit, handleChange, handleBlur } ) => (
                         <Form className="formulario">
                         {console.log(errors)}
                         <div>
@@ -129,10 +185,10 @@ const Formulario = () => {
                         {formularioEnviado && <p className='exito'>Formulario enviado con éxito</p>}
                     </Form>
                     )} */}
-                </Formik>
-            </div>
-        </>
-    );
-}
+				</Formik>
+			</div>
+		</>
+	);
+};
 
 export default Formulario;
