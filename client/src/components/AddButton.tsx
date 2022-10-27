@@ -12,6 +12,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import { DialogContentText } from "@mui/material";
 
 const StyledMenu = styled((props: MenuProps) => (
 	<Menu
@@ -86,6 +87,11 @@ export default function AddButton() {
 
 	const handleCloseDialogFile = () => {
 		setDialogOpenFile(false);
+	};
+
+	const somestyle = {
+		color: "red",
+		fontSize: "10px"
 	};
 
 	return (
@@ -164,6 +170,7 @@ export default function AddButton() {
 
       <Dialog open={dialogOpenFile} onClose={handleClose}>
 				<DialogTitle>UPLOAD NOTE FILE</DialogTitle>
+				<DialogContent style={somestyle}>Just PDF files</DialogContent>
 				<DialogContent>
 					<TextField
 						autoFocus
@@ -176,7 +183,7 @@ export default function AddButton() {
 					/>
           <Button variant="contained" component="label" color="primary">
             <FileUploadIcon/>Upload File
-            <input type="file" hidden/>
+            <input type="file" hidden accept="application/pdf"/>
           </Button>
 					<TextField
 						autoFocus
