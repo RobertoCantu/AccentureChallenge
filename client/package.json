@@ -8,6 +8,7 @@
     "@iconify/react": "^4.0.0",
     "@mui/icons-material": "^5.10.9",
     "@mui/material": "^5.10.11",
+    "@prisma/client": "^4.5.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -51,6 +52,7 @@
     ]
   },
   "devDependencies": {
-    "@iconify/icons-eva": "^1.2.3"
+    "@iconify/icons-eva": "^1.2.3",
+    "prisma": "^4.5.0"
   }
 }
