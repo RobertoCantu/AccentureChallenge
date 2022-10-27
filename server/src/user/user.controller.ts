@@ -30,7 +30,7 @@ export const signup = async (
         );
 
         const createMainFolder = await FolderService.createFolder(
-            "main",
+            "root",
             createdUser.id,
             null
         );
@@ -70,7 +70,7 @@ export const login = async (
 
         const accessToken = jwt.sign({userId: existingUser.id}, process.env.TOKEN_SECRET as string, {expiresIn: process.env.ACCESS_TOKEN_EXPIRATION_TIME});
 
-        return res.status(201).json({accessToken: accessToken});
+        return res.status(201).json({accessToken: accessToken, user: {firstName: existingUser.firstName, lastName: existingUser.lastName}});
     } catch (error: any) {
         return res.status(500).send(error.message);
     }
