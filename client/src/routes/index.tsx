@@ -2,7 +2,7 @@ import { useRoutes, Navigate } from "react-router-dom";
 
 // Components
 import MuiDrawer from "../layouts/DashboardSidebar";
-import FileCards from "../components/FileCards";
+import FileCards from "../components/Files/FileCards";
 import Login from "../components/formLogin";
 import Register from "../components/formRegistro";
 
