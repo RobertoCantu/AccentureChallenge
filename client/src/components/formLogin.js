@@ -104,6 +104,41 @@ const Formulario = () => {
                         <Form className="formulario">
                         {console.log(errors)}
                         <div>
+                            <label htmlFor='correo'>Correo</label>
+                            <Field 
+                                type="text" 
+                                id='correo' 
+                                name='correo' 
+                                placeholder='ejemplo@correo.com' 
+                            />
+                            <ErrorMessage name="correo" component={() => (
+                                <div className="error">{errors.correo}</div>
+                            )}/>
+                        </div>
+                        <div>
+                            <label htmlFor='contraseña'>Contraseña</label>
+                            <Field
+                                type="text" 
+                                id='contraseña' 
+                                name='contraseña' 
+                                placeholder='Tu contraseña' 
+                            />
+                            <ErrorMessage name="contraseña" component={() => (
+                                <div className="error">{errors.contraseña}</div>
+                            )}/>
+                        </div>
+                        <button type='submit'>Enviar</button>
+                        {formularioEnviado && <p className='exito'>Formulario enviado con éxito</p>}
+                        <div>
+                            <p className='reg'>¿No tienes una cuenta? <a href='/auth/register'>Regístrate</a></p>
+                        </div>
+                    </Form>
+                    )}
+                    
+                    {/* {( { values, errors, touched, handleSubmit, handleChange, handleBlur } ) => (
+                        <Form className="formulario">
+                        {console.log(errors)}
+                        <div>
                             <label htmlFor='contraseña'>contraseña</label>
                             <input 
                                 type="text" 

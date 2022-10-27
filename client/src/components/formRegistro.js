@@ -11,6 +11,7 @@ const Formulario = () => {
                 <Formik
                     initialValues={{
                         nombre: '',
+                        apellido: '',
                         correo: '',
                         contraseña: ''
                     }}
@@ -21,7 +22,14 @@ const Formulario = () => {
                         if(!valores.nombre){
                             errores.nombre = 'Por favor ingresa tu nombre'
                         }else if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(valores.nombre)){
-                            errores.contraseña = 'El nombre solo puede contener letras y espacios'
+                            errores.nombre = 'El nombre solo puede contener letras y espacios'
+                        }
+
+                        //Validación nombre
+                        if(!valores.apellido){
+                            errores.apellido = 'Por favor ingresa tu apellido'
+                        }else if(!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(valores.apellido)){
+                            errores.apellido = 'Tu apellido solo puede contener letras y espacios'
                         }
 
                         //Validación contraseña
@@ -65,6 +73,18 @@ const Formulario = () => {
                             )}/>
                         </div>
                         <div>
+                            <label htmlFor='apellido'>Apellido</label>
+                            <Field 
+                                type="text" 
+                                id='apellido' 
+                                name='apellido' 
+                                placeholder='Tu apellido' 
+                            />
+                            <ErrorMessage name="apellido" component={() => (
+                                <div className="error">{errors.apellido}</div>
+                            )}/>
+                        </div>
+                        <div>
                             <label htmlFor='correo'>Correo</label>
                             <Field 
                                 type="text" 
@@ -77,7 +97,7 @@ const Formulario = () => {
                             )}/>
                         </div>
                         <div>
-                            <label htmlFor='contraseña'>contraseña</label>
+                            <label htmlFor='contraseña'>Contraseña</label>
                             <Field
                                 type="text" 
                                 id='contraseña' 
@@ -91,7 +111,7 @@ const Formulario = () => {
                         <button type='submit'>Enviar</button>
                         {formularioEnviado && <p className='exito'>Formulario enviado con éxito</p>}
                         <div>
-                            <p className='reg'>¿Ya tienes una cuenta? <a href=''>Inicia sesión</a></p>
+                            <p className='reg'>¿Ya tienes una cuenta? <a href='/auth/login'>Inicia sesión</a></p>
                         </div>
                     </Form>
                     )}
