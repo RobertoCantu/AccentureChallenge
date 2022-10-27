@@ -6,7 +6,7 @@ import "./logreg.css";
 import useAuth from "../hooks/useAuth";
 
 const Formulario = () => {
-	const [formularioEnviado, cambiarFormularioEnviado] = useState(false);
+    const [formularioEnviado, cambiarFormularioEnviado] = useState(false);
 	// Context
 	const context = useAuth();
 	const { login } = context;
@@ -118,7 +118,7 @@ const Formulario = () => {
                         <div>
                             <label htmlFor='contraseña'>Contraseña</label>
                             <Field
-                                type="text" 
+                                type="password" 
                                 id='contraseña' 
                                 name='contraseña' 
                                 placeholder='Tu contraseña' 
