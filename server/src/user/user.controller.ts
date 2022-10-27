@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
 
 import * as UserService from "./user.service";
+import * as FolderService from '../folder/folder.service';
 
 export const signup = async (
     req: Request<{}, {}, { email: string; firstName: string; lastName: string; password: string }>,
@@ -28,7 +29,13 @@ export const signup = async (
             hashPassword
         );
 
-        if (createdUser.id) return res.status(201).send("Registro creado satisfactoriamente");
+        const createMainFolder = await FolderService.createFolder(
+            "root",
+            createdUser.id,
+            null
+        );
+
+        if (createdUser.id && createMainFolder.id) return res.status(201).send("Registro creado satisfactoriamente");
         return res.sendStatus(500);
     } catch (error: any) {
         return res.status(500).send(error.message)
@@ -63,7 +70,7 @@ export const login = async (
 
         const accessToken = jwt.sign({userId: existingUser.id}, process.env.TOKEN_SECRET as string, {expiresIn: process.env.ACCESS_TOKEN_EXPIRATION_TIME});
 
-        return res.status(201).json({accessToken: accessToken});
+        return res.status(201).json({accessToken: accessToken, user: {firstName: existingUser.firstName, lastName: existingUser.lastName}});
     } catch (error: any) {
         return res.status(500).send(error.message);
     }

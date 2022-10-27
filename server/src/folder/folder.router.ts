@@ -4,6 +4,7 @@ import {
     createFolderController,
     deleteFolderController,
     getFolderController,
+    getFolderItemsController,
     getUserFoldersController,
     updateFolderController,
 } from './folder.controller';
@@ -22,3 +23,5 @@ folderRouter
     .get(getFolderController)
     .put(updateFolderController)
     .delete(deleteFolderController);
+
+folderRouter.route('/items/:folderId').get(getFolderItemsController);

@@ -1,4 +1,4 @@
-import { Folder } from '@prisma/client';
+import { File, Folder } from '@prisma/client';
 import { db } from '../utils/db.server';
 import { deleteObject } from '../utils/s3-utills';
 
@@ -27,6 +27,35 @@ export const getFolder = async (folderId: string): Promise<Folder | null> => {
     return entry;
 };
 
+export const getFolderItems = async (
+    folderId: string
+): Promise<{ id: string; children: Folder[]; files: File[] } | null> => {
+    const entry = await db.folder.findUnique({
+        where: {
+            id: folderId,
+        },
+        include: {
+            children: true,
+            files: true,
+        },
+    });
+
+    return entry
+        ? { id: entry.id, children: entry.children, files: entry.files }
+        : null;
+};
+
+export const getUserRootFolder = async (userId: string): Promise<Folder | null> => {
+    const entry = await db.folder.findFirst({
+        where: {
+            userId,
+            parentId: null,
+        },
+    });
+
+    return entry;
+};
+
 export const getUserFolders = async (
     userId: string,
     parentId: string | undefined
@@ -36,7 +65,7 @@ export const getUserFolders = async (
               parentId,
               userId,
           }
-        : { userId };
+        : { userId, parentId: null };
 
     const entries = await db.folder.findMany({
         where: whereQuery,
