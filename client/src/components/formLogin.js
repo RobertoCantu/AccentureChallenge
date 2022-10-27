@@ -76,7 +76,7 @@ const Formulario = () => {
 							<div>
 								<label htmlFor="contraseña">contraseña</label>
 								<Field
-									type="text"
+									type="password"
 									id="contraseña"
 									name="contraseña"
 									placeholder="Tu contraseña"

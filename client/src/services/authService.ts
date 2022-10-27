@@ -20,7 +20,7 @@ export async function login(email: string, password: string) {
 export async function register(
 	email: string,
 	firstName: string,
-	lastname: string,
+	lastName: string,
 	password: string
 ) {
 	return new Promise(async (resolve, reject) => {
@@ -30,7 +30,7 @@ export async function register(
 			const response = await axios.post(url, {
 				email,
 				firstName,
-				lastname,
+				lastName,
 				password,
 			});
 
