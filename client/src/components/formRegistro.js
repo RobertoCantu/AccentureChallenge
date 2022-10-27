@@ -35,8 +35,8 @@ const Formulario = () => {
                         //Validación contraseña
                         if(!valores.contraseña){
                             errores.contraseña = 'Por favor ingresa tu contraseña'
-                        }else if(!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/.test(valores.contraseña)){
-                            errores.contraseña = 'La contraseña debe contener entre 6 a 20 caracteres, tener una letra minúscula y una mayúscula'
+                        }else if(!/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$/.test(valores.contraseña)){
+                            errores.contraseña = 'La contraseña debe contener entre 6 a 20 caracteres, tener una caracter especial y uno numérico'
                         }
 
                         //Validación correo
@@ -99,7 +99,7 @@ const Formulario = () => {
                         <div>
                             <label htmlFor='contraseña'>Contraseña</label>
                             <Field
-                                type="text" 
+                                type="password" 
                                 id='contraseña' 
                                 name='contraseña' 
                                 placeholder='Tu contraseña' 
