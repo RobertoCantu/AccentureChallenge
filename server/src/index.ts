@@ -6,7 +6,7 @@ import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import { multerMiddleware } from './middleware/multer';
 import { db } from './utils/db.server';
-import { authRouter } from './auth/auth.router';
+import { userRouter } from './user/user.router';
 import { fileRouter } from './file/file.router';
 import { folderRouter } from './folder/folder.router';
 
@@ -22,7 +22,7 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/api/v1/auth/', authRouter);
+app.use("/api/v1/user/", userRouter);
 app.use('/api/v1/file/', fileRouter);
 app.use('/api/v1/folder/', folderRouter);
 
