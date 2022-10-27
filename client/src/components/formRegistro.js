@@ -34,7 +34,7 @@ const Formulario = () => {
 								"El nombre solo puede contener letras y espacios";
 						}
 
-						//Validación nombre
+						//Validación apellido
 						if (!valores.apellido) {
 							errores.apellido = "Por favor ingresa tu apellido";
 						} else if (!/^[a-zA-ZÀ-ÿ\s]{1,40}$/.test(valores.apellido)) {
@@ -46,12 +46,12 @@ const Formulario = () => {
 						if (!valores.contraseña) {
 							errores.contraseña = "Por favor ingresa tu contraseña";
 						} else if (
-							!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/.test(
+							!/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,20}$/.test(
 								valores.contraseña
 							)
 						) {
 							errores.contraseña =
-								"La contraseña debe contener entre 6 a 20 caracteres, tener una letra minúscula y una mayúscula";
+								"La contraseña debe contener entre 6 a 20 caracteres, tener un caracter especial y uno númerico";
 						}
 
 						//Validación correo

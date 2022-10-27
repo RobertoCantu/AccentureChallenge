@@ -7,25 +7,6 @@ import useAuth from "../hooks/useAuth";
 
 const Formulario = () => {
     const [formularioEnviado, cambiarFormularioEnviado] = useState(false);
-    return (
-        <>
-            <h1>Login</h1>
-            <div className='contenedor'>
-                <Formik
-                    initialValues={{
-                        contraseña: '',
-                        correo: ''
-                    }}
-                    validate={(valores) => {
-                        let errores = {};
-                        
-                        //Validación contraseña
-                        if(!valores.contraseña){
-                            errores.contraseña = 'Por favor ingresa tu contraseña'
-                        }else if(!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/.test(valores.contraseña)){
-                            errores.contraseña = 'La contraseña debe contener entre 6 a 20 caracteres, tener una letra minúscula y una mayúscula'
-                        }
-	const [formularioEnviado, cambiarFormularioEnviado] = useState(false);
 	// Context
 	const context = useAuth();
 	const { login } = context;
