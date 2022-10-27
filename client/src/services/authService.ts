@@ -1,6 +1,15 @@
 // utils
 import axios from "../utils/axios";
 
+export const getAuthHeaders = () => {
+    const token = localStorage.getItem('accessToken');
+    console.log(token);
+    return {
+        Authorization: 'Bearer' + token,
+        'x-access-token': token,
+    };
+};
+
 export async function login(email: string, password: string) {
 	return new Promise(async (resolve, reject) => {
 		const url = "/api/v1/user/login";
