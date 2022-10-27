@@ -15,7 +15,7 @@ export const signup = async (
         const existingUser = await UserService.getUser(email);
         
         if(existingUser) {
-            res.status(404).send("Este email ya está vinculado a una cuenta");
+            res.status(400).send("Este email ya está vinculado a una cuenta");
             return;
         };
 
@@ -35,8 +35,11 @@ export const signup = async (
             null
         );
 
-        if (createdUser.id && createMainFolder.id) return res.status(201).send("Registro creado satisfactoriamente");
-        return res.sendStatus(500);
+        if (createdUser.id && createMainFolder.id) {
+            return res.status(201).send("Registro creado satisfactoriamente");
+        } else {
+            return res.sendStatus(500);
+        }
     } catch (error: any) {
         return res.status(500).send(error.message)
     }
@@ -52,25 +55,19 @@ export const login = async (
         const existingUser = await UserService.getUser(email);
         
         if(!existingUser) {
-            res.status(404).send("El usuario no existe");
-            return;
+            return res.status(400).send("El usuario no existe");;
+        } else {
+            bcrypt.compare(password, existingUser.password, function(error, isValid) {
+                if (isValid) {
+                    const accessToken = jwt.sign({userId: existingUser.id}, process.env.TOKEN_SECRET as string, {expiresIn: process.env.ACCESS_TOKEN_EXPIRATION_TIME});
+    
+                    return res.status(201).json({accessToken: accessToken, user: {firstName: existingUser.firstName, lastName: existingUser.lastName}});
+                } else {
+                    res.status(400).send("El usuario o la contraseña son incorrectos");
+                    return;
+                };
+            });
         };
-
-        bcrypt.compare(password, existingUser.password, function(err, result) {
-            if (err) {
-                console.log(err);
-                res.sendStatus(500);
-                return;
-            }
-            if (!result) {
-                res.status(404).send("El usuario o la contraseña son incorrectos");
-                return;
-            }
-        });
-
-        const accessToken = jwt.sign({userId: existingUser.id}, process.env.TOKEN_SECRET as string, {expiresIn: process.env.ACCESS_TOKEN_EXPIRATION_TIME});
-
-        return res.status(201).json({accessToken: accessToken, user: {firstName: existingUser.firstName, lastName: existingUser.lastName}});
     } catch (error: any) {
         return res.status(500).send(error.message);
     }

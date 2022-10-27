@@ -6,6 +6,6 @@ export const validateResult = async (request: Request, response: Response, next:
         validationResult(request).throw();
         return next()
     } catch (error: any) {
-        return response.send({ errors: error.array()[0].msg });
+        return response.status(400).send({ errors: error.array()[0].msg });
     }
 };
