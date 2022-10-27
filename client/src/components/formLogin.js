@@ -71,7 +71,7 @@ const Formulario = () => {
                         <button type='submit'>Enviar</button>
                         {formularioEnviado && <p className='exito'>Formulario enviado con éxito</p>}
                         <div>
-                            <p className='reg'>¿No tienes una cuenta? <a href=''>Regístrate</a></p>
+                            <p className='reg'>¿No tienes una cuenta? <a href='/auth/register'>Regístrate</a></p>
                         </div>
                     </Form>
                     )}
