@@ -3,6 +3,8 @@ import { useRoutes, Navigate } from 'react-router-dom';
 // Components
 import MuiDrawer from '../layouts/DashboardSidebar';
 import FileCards from '../components/FileCards';
+import Login from '../components/formLogin';
+import Register from '../components/formRegistro';
 
 // Dashbaord layout
 import DashboardLayout from '../layouts';
@@ -12,22 +14,22 @@ export default function Router() {
       {
         path: 'auth',
         children: [
-          // {
-          //   path: 'login',
-          //   element: (
+          {
+            path: 'login',
+            element: (
           //     <GuestGuard>
-          //       <Login />
+                <Login />
           //     </GuestGuard>
-          //   )
-          // },
-            // {
-            //   path: 'register',
-            //   element: (
+            )
+          },
+            {
+              path: 'register',
+              element: (
             //   <GuestGuard>
-            //       <Register />
+                  <Register />
             //   </GuestGuard>
-            //   )
-            // },
+              )
+            },
             // {
             //   path: 'logout',
             //   element: <Logout/>

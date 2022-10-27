@@ -1,16 +1,16 @@
+import './utils/typecheck';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import { PrismaClient } from '@prisma/client';
-import express, { Application, Request, Response, type Express } from 'express';
+import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
-import { s3FileUpload } from './middleware/multer';
-import { prismaClient } from './prisma';
-import multerS3 from 'multer-s3';
+import { multerMiddleware } from './middleware/multer';
+import { db } from './utils/db.server';
 import { userRouter } from './user/user.router';
+import { fileRouter } from './file/file.router';
+import { folderRouter } from './folder/folder.router';
 
 const app: Application = express();
-// const prisma = new PrismaClient();
 
 const port: number = 3001;
 
@@ -19,16 +19,19 @@ app.use(
         origin: '*',
     })
 );
-
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/v1/user/", userRouter);
+app.use('/api/v1/file/', fileRouter);
+app.use('/api/v1/folder/', folderRouter);
 
 app.get('/index', (req: Request, res: Response) => {
     res.send('Server running...');
 });
 
-app.post('/test_file', s3FileUpload.single('note'), (req, res) => {
+app.post('/test_file', multerMiddleware.single('note'), (req, res) => {
+    console.log(req.body);
     const file = req.file as Express.MulterS3.File;
     if (file) {
         const { bucket, key } = file;
@@ -40,7 +43,7 @@ app.post('/test_file', s3FileUpload.single('note'), (req, res) => {
 
 app.get('/test_create', async (req: Request, res: Response) => {
     const test_email = 'test_user@mail.com';
-    const user_query = await prismaClient.user.findUnique({
+    const user_query = await db.user.findUnique({
         where: {
             email: test_email,
         },

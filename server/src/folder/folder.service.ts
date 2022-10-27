@@ -1,13 +1,13 @@
-import { File, Folder } from '@prisma/client';
-import { prismaClient } from './prisma';
-import { deleteObject } from './s3-utills';
+import { Folder } from '@prisma/client';
+import { db } from '../utils/db.server';
+import { deleteObject } from '../utils/s3-utills';
 
-export async function createFolder(
+export const createFolder = async (
     name: string,
     userId: string,
-    parentId: string
-): Promise<Folder> {
-    const created = await prismaClient.folder.create({
+    parentId: string | null
+): Promise<Folder> => {
+    const created = await db.folder.create({
         data: {
             name,
             userId,
@@ -16,19 +16,37 @@ export async function createFolder(
     });
 
     return created;
-}
+};
 
-export async function getFolder(folderId: string): Promise<Folder | null> {
-    const entry = await prismaClient.folder.findUnique({
+export const getFolder = async (folderId: string): Promise<Folder | null> => {
+    const entry = await db.folder.findUnique({
         where: {
             id: folderId,
         },
     });
     return entry;
-}
+};
 
-export async function deleteFolder(folderId: string): Promise<Folder> {
-    const toDelete = await prismaClient.folder.findUnique({
+export const getUserFolders = async (
+    userId: string,
+    parentId: string | undefined
+): Promise<Folder[]> => {
+    const whereQuery = parentId
+        ? {
+              parentId,
+              userId,
+          }
+        : { userId };
+
+    const entries = await db.folder.findMany({
+        where: whereQuery,
+    });
+
+    return entries;
+};
+
+export const deleteFolder = async (folderId: string): Promise<Folder> => {
+    const toDelete = await db.folder.findUnique({
         where: {
             id: folderId,
         },
@@ -54,29 +72,27 @@ export async function deleteFolder(folderId: string): Promise<Folder> {
         ]);
     }
 
-    const deleted = await prismaClient.folder.delete({
+    const deleted = await db.folder.delete({
         where: {
             id: folderId,
         },
     });
 
     return deleted;
-}
+};
 
-export async function updateFolder(
+export const updateFolder = async (
     folderId: string,
     data: Partial<Folder>
-): Promise<Folder> {
-    const origin = await getFolder(folderId);
-    const created = await prismaClient.folder.update({
+): Promise<Folder> => {
+    const created = await db.folder.update({
         where: {
             id: folderId,
         },
         data: {
-            ...origin,
             ...data,
         },
     });
 
     return created;
-}
+};

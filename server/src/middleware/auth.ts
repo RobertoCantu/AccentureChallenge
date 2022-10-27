@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken"
 
-export const verifyToken = async (request: Request, response: Response, next: NextFunction ) => {
+export const isAuthenticated = async (request: Request, response: Response, next: NextFunction ) => {
     try {
         const token = request.get("Authorization")?.split(" ")[1];
 
@@ -18,3 +18,14 @@ export const verifyToken = async (request: Request, response: Response, next: Ne
         return response.status(500).json(error.message)
     }
 };
+
+// export const isAuthenticated = (
+//    req: Request,
+//    res: Response,
+//    next: NextFunction
+// ) => {
+//    req.user = {
+//        id: '6359925df824bbcd1cb2934a',
+//    };
+//    next();
+// };

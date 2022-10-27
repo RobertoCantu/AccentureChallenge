@@ -8,7 +8,7 @@ import MuiDrawer from './layouts/DashboardSidebar';
 
 function App() {
   return (
-    <div className="App">
+    <div >
       <Router/>
      
     </div>
