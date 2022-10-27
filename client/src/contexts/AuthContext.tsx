@@ -150,10 +150,11 @@ function AuthProvider({ children }: { children: ReactNode }) {
 	const login = async (email: string, password: string) => {
 		try {
 			const response: any = await authLogin(email, password);
+			console.log(response);
 
-			const { message } = response;
+			const { accessToken, user } = response;
 
-			const { token, user } = message;
+			//const { token, user } = message;
 			// const user: any = {
 			//   "name": response.name,
 			//   "lastName": response.lastName,
@@ -163,7 +164,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
 			// }
 
 			// Set JWT in local storage
-			window.localStorage.setItem("accessToken", token);
+			window.localStorage.setItem("accessToken", accessToken);
 			window.localStorage.setItem("user", JSON.stringify(user));
 
 			dispatch({
