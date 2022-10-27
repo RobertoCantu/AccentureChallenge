@@ -11,6 +11,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 const StyledMenu = styled((props: MenuProps) => (
 	<Menu
@@ -59,6 +60,7 @@ export default function AddButton() {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
 	const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [dialogOpenFile, setDialogOpenFile] = React.useState(false);
 
 	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
@@ -69,11 +71,21 @@ export default function AddButton() {
 	};
 
 	const handleOpenDialogText = () => {
-		setDialogOpen(true);
+		setAnchorEl(null);
+    setDialogOpen(true);
 	};
 
 	const handleCloseDialogText = () => {
 		setDialogOpen(false);
+	};
+
+  const handleOpenDialogFile = () => {
+		setAnchorEl(null);
+    setDialogOpenFile(true);
+	};
+
+	const handleCloseDialogFile = () => {
+		setDialogOpenFile(false);
 	};
 
 	return (
@@ -103,11 +115,12 @@ export default function AddButton() {
 					<NoteAddIcon />
 					Create Note
 				</MenuItem>
-				<MenuItem onClick={handleClose} disableRipple>
+				<MenuItem onClick={handleOpenDialogFile} disableRipple>
 					<AttachFileIcon />
 					Upload File
 				</MenuItem>
 			</StyledMenu>
+
 			<Dialog open={dialogOpen} onClose={handleClose}>
 				<DialogTitle>CREATE NOTE</DialogTitle>
 				<DialogContent>
@@ -141,6 +154,42 @@ export default function AddButton() {
 				</DialogContent>
 				<DialogActions>
 					<Button variant="outlined" onClick={handleCloseDialogText}>
+						CANCEL
+					</Button>
+					<Button variant="contained" onClick={handleClose}>
+						SUBMIT
+					</Button>
+				</DialogActions>
+			</Dialog>
+
+      <Dialog open={dialogOpenFile} onClose={handleClose}>
+				<DialogTitle>UPLOAD NOTE FILE</DialogTitle>
+				<DialogContent>
+					<TextField
+						autoFocus
+						margin="dense"
+						id="name"
+						label="Note Title"
+						type="title"
+						fullWidth
+						variant="outlined"
+					/>
+          <Button variant="contained" component="label" color="primary">
+            <FileUploadIcon/>Upload File
+            <input type="file" hidden/>
+          </Button>
+					<TextField
+						autoFocus
+						margin="dense"
+						id="name"
+						label="Tag"
+						type="tag"
+						fullWidth
+						variant="outlined"
+					/>
+				</DialogContent>
+				<DialogActions>
+					<Button variant="outlined" onClick={handleCloseDialogFile}>
 						CANCEL
 					</Button>
 					<Button variant="contained" onClick={handleClose}>

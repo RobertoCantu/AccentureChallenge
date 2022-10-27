@@ -7,7 +7,6 @@ function FileCards() {
   return (
     <div>
       <AddButton></AddButton>
-      <FormNote></FormNote>
     </div>
   )
 }
