@@ -106,12 +106,12 @@ function AccountPopover() {
 					<Typography variant="subtitle1" noWrap>
 						{/* {user?.displayName}
 						 */}
-						Pancho
+						{user?.firstName + " " + user?.lastName}
 					</Typography>
-					<Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
-						{/* {user?.email} */}
+					{/* <Typography variant="body2" sx={{ color: "text.secondary" }} noWrap>
+						{user?.email}
 						Emaill
-					</Typography>
+					</Typography> */}
 				</Box>
 				<Divider sx={{ my: 1 }} />
 				{MENU_OPTIONS.map((option) => (
