@@ -1,18 +1,16 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import "./App.css";
 
 // Components
-import Router from './routes';
+import Router from "./routes";
 
-import MuiDrawer from './layouts/DashboardSidebar';
+// Hooks
+import useAuth from "./hooks/useAuth";
 
 function App() {
-  return (
-    <div >
-      <Router/>
-     
-    </div>
-  );
+	const { isInitialized } = useAuth();
+
+	return <div>{isInitialized ? <Router /> : null}</div>;
 }
 
 export default App;

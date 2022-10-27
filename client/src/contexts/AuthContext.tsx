@@ -191,18 +191,18 @@ function AuthProvider({ children }: { children: ReactNode }) {
 				lastName,
 				password
 			);
-			const { reponse } = response;
+			const { accessToken, user } = response;
 
-			const token = response.token;
-			const user: any = {
-				name: response.name,
-				lastName: response.lastName,
-				email: response.email,
-				phone: response.phone,
-				id: response._id,
-			};
+			// const token = response.token;
+			// const user: any = {
+			// 	name: response.name,
+			// 	lastName: response.lastName,
+			// 	email: response.email,
+			// 	phone: response.phone,
+			// 	id: response._id,
+			// };
 			//Set Jwt in local storage
-			window.localStorage.setItem("accessToken", token);
+			window.localStorage.setItem("accessToken", accessToken);
 			window.localStorage.setItem("user", JSON.stringify(user));
 
 			dispatch({

@@ -94,7 +94,7 @@ const Formulario = () => {
 							)}
 							<div>
 								<p className="reg">
-									¿No tienes una cuenta? <a href="">Regístrate</a>
+									¿No tienes una cuenta? <a href="/auth/register">Regístrate</a>
 								</p>
 							</div>
 						</Form>
