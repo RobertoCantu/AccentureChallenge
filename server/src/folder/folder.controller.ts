@@ -1,5 +1,5 @@
-import { Folder } from '@prisma/client';
-import { Request, Response } from 'express';
+import { File, Folder } from '@prisma/client';
+import { Request, Response } from 'express';;
 import * as FolderService from './folder.service';
 
 const validateFolderToUser = async (folderId: string, req: Request) => {
@@ -48,12 +48,18 @@ export const createFolderController = async (
 };
 
 export const getUserFoldersController = async (
-    req: Request<{ parentId: string }, {}, {}>,
+    req: Request<{}, {}, {}, { parentId?: string }>,
     res: Response<Folder[]>
 ) => {
     if (!req.user) return res.sendStatus(400);
-    const { parentId } = req.params;
+    const { parentId } = req.query;
     const { id: userId } = req.user;
+
+    if (!parentId) {
+        const rootFolder = await FolderService.getUserRootFolder(userId);
+
+        return res.status(200).send(rootFolder ? [rootFolder] : []);
+    }
 
     const folder = await validateFolderToUser(parentId, req)
         .then((folder) => folder)
@@ -78,6 +84,28 @@ export const getFolderController = async (
     if (!folder) return;
 
     res.status(200).send(folder);
+};
+
+export const getFolderItemsController = async (
+    req: Request<{ folderId: string }, {}, {}>,
+    res: Response<{ folderId: string; folders: Folder[]; files: File[] }>
+) => {
+    if (!req.user) return res.sendStatus(400);
+    const { folderId } = req.params;
+
+    const folder = await validateFolderToUser(folderId, req)
+        .then((folder) => folder)
+        .catch((err) => err(res));
+    if (!folder) return;
+
+    const folderItems = await FolderService.getFolderItems(folderId);
+    if (!folderItems) return res.sendStatus(404);
+
+    res.status(200).send({
+        folderId,
+        folders: folderItems.children,
+        files: folderItems.files,
+    });
 };
 
 export const deleteFolderController = async (
@@ -109,7 +137,7 @@ export const updateFolderController = async (
         .then((folder) => folder)
         .catch((err) => err(res));
     if (!currentFolder) return;
-    
+
     if ('id' in folder) delete folder['id'];
     await FolderService.updateFolder(folderId, folder);
 
