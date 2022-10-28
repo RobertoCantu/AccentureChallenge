@@ -32,12 +32,18 @@ export const useWorkspace = (folderId?: string) => {
         if (!currentFolderId || !folderItems) return;
 
         createFolder(folderName, currentFolderId)
-            .then((folder) =>
-                setFolderItems({
-                    ...folderItems,
-                    folders: [...folderItems.folders, folder],
-                })
-            )
+            .then((folder) => {
+                if (folder) {
+                    setFolderItems({
+                        ...folderItems,
+                        folders: [...folderItems.folders, folder],
+                    });
+                } else {
+                    console.error(
+                        `Ya existe una carpeta con el nombre ${folderName}`
+                    );
+                }
+            })
             .catch(setError);
     };
 
@@ -62,6 +68,7 @@ export const useWorkspace = (folderId?: string) => {
     }, [currentFolder, currentFolderId]);
 
     useEffect(() => {
+        // Gets folder items (subfolders & files) once the current folder has resolved.
         if (
             !currentFolderId ||
             (folderItems && folderItems.folderId === currentFolderId)
