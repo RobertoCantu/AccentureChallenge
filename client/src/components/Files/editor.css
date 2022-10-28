@@ -1,0 +1,43 @@
+.ed {
+    text-align: center;
+  }
+  
+  .ed-logo {
+    animation: ed-logo-spin infinite 20s linear;
+    height: 80px;
+  }
+  
+  .ed-header {
+    background-color: #222;
+    height: 150px;
+    padding: 20px;
+    color: white;
+  }
+  
+  .ed-title {
+    font-size: 1.5em;
+  }
+  
+  .ed-intro {
+    font-size: large;
+  }
+  
+  @keyframes ed-logo-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  .editorContainer {
+    padding: 1em;
+    margin: 1em;
+  }
+  
+  .editors {
+    border: 1px blue solid;
+    padding: 1em;
+    margin: 1em;
+    font-family: 'Open Sans';
+    font-size: 90%;
+    background-color: white;
+  }
+  

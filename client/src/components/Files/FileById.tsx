@@ -1,16 +1,15 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import {Editor, EditorState} from 'draft-js';
-import 'draft-js/dist/Draft.css';
+import React, {Component} from 'react';
+import MyEditor from './editor'
+import './editor.css'
 
-
-
-function FileById() {
-    const [editorState, setEditorState] = React.useState(
-        () => EditorState.createEmpty(),
-    );
-
-    return <Editor editorState={editorState} onChange={setEditorState} />;
+class FileById extends Component{
+    render() {
+        return (
+          <div className="ed">
+            <MyEditor />
+          </div>
+        );
+      }
 }
 
 export default FileById;
