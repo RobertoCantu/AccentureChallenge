@@ -24,6 +24,7 @@ function FileList() {
 	};
 
 	useEffect(() => {
+		console.log("usee efect");
 		if (folderItems && loading) {
 			setCurrentFolderFiles(folderItems.files);
 			setCurrentFolderFolders(folderItems.folders);
@@ -33,6 +34,7 @@ function FileList() {
 	console.log("errror", error);
 	console.log("Soy el current folder", currentFolder);
 	console.log("Children", currentFolderFolders);
+	console.log("FOlder items", folderItems);
 
 	return (
 		<Box sx={{ flexGrow: 1 }}>
@@ -46,14 +48,15 @@ function FileList() {
 							<FileCard
 								name={file.name}
 								handleClick={() => handleFileSwitch(file.id)}
+								isFolder={true}
 							/>
 						</Grid>
 					);
 				})}
 				{currentFolderFiles.map((file: any, index: number) => {
 					return (
-						<Grid key={index} item xs={4}>
-							<FileCard name={file.name} />
+						<Grid key={index} item xs={3}>
+							<FileCard name={file.name} isFolder={false} />
 						</Grid>
 					);
 				})}
