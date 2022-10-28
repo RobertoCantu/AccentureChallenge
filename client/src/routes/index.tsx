@@ -5,6 +5,7 @@ import MuiDrawer from "../layouts/DashboardSidebar";
 import FileList from "../components/Files/FileList";
 import Login from "../components/formLogin";
 import Register from "../components/formRegistro";
+import FileById from "../components/Files/FileById";
 
 // Dashbaord layout
 import DashboardLayout from "../layouts";
@@ -52,6 +53,7 @@ export default function Router() {
 			children: [
 				// { path: '/dashboard', element: <RidesList /> },
 				{ path: "test", element: <FileList /> },
+				{ path: "test/file", element: <FileById /> },
 				// { path: 'profile', element: <UserDetails /> },
 				// { path: 'rides/:rideId', element: <RideDetails /> },
 				// { path: 'rides/edit/:rideId', element: <AddRoute mainText='Modifica tu ruta' secondaryText='Modifica los siguientes datos para actualizar tu ruta' /> },
