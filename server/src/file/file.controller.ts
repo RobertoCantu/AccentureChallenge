@@ -35,7 +35,7 @@ export const createFileController = async (
 ) => {
     if (!req.user) return res.send(400);
     const file = req.file as Express.MulterS3.File;
-    if (!file) res.sendStatus(500);
+    if (!file) return res.sendStatus(500);
 
     const { key } = file;
     const { name: fileName, folderId } = req.body;
@@ -47,7 +47,7 @@ export const createFileController = async (
             folderId,
             key
         );
-        if (createdFile.id) res.sendStatus(200);
+        if (createdFile.id) return res.status(200).send(createdFile);
         return res.sendStatus(500);
     } catch (error) {
         return res.status(500).send(error);

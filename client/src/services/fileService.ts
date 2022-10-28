@@ -1,3 +1,4 @@
+import { File as NoteFile } from '../@types/models';
 import axios from '../utils/axios';
 
 const FILE_API_PREFIX = '/api/v1/file';
@@ -6,7 +7,7 @@ export async function createFile(
     fileName: string,
     folderId: string,
     file: File
-) {
+): Promise<NoteFile | null> {
     const body = new FormData();
 
     body.append('name', fileName);
@@ -15,12 +16,15 @@ export async function createFile(
 
     return axios
         .post(`${FILE_API_PREFIX}/`, body, {
-            headers: { 'Content-Type': 'multipart/form-data' },
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
         })
         .then((res) => {
             if (res.status === 200) return res.data;
             throw res.data;
-        });
+        })
+        .catch(console.error);
 }
 
 export async function getFileResource(fileId: string) {

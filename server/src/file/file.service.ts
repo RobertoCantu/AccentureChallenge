@@ -8,6 +8,19 @@ export const createFile = async (
     folderId: string,
     s3Path: string
 ): Promise<File> => {
+    if (!name || name.length == 0) throw new Error(`File name can't be empty`);
+
+    const fileAlreadyExist =
+        (await db.folder.count({
+            where: {
+                id: folderId,
+                name,
+            },
+        })) != 0;
+
+    if (fileAlreadyExist)
+        throw new Error(`File ${name} already exists in folder.`);
+
     const created = await db.file.create({
         data: {
             name,
@@ -54,7 +67,7 @@ export const updateFile = async (
             resourceUrl: true,
         },
     });
-    
+
     const created = await db.file.update({
         where: {
             id: fileId,
