@@ -15,6 +15,11 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import { CardActionArea, CardContent, DialogContentText } from "@mui/material";
 import { Card } from "@mui/material";
 import { Grid, Box } from "@mui/material";
+import { Form, Formik, Field, ErrorMessage } from "formik";
+import { LoadingButton } from "@mui/lab";
+
+// Hooks
+import { useWorkspace } from "../hooks/useWorkspace";
 
 const StyledMenu = styled((props: MenuProps) => (
 	<Menu
@@ -64,6 +69,7 @@ export default function AddButton() {
 	const open = Boolean(anchorEl);
 	const [dialogOpen, setDialogOpen] = React.useState(false);
 	const [dialogOpenFile, setDialogOpenFile] = React.useState(false);
+	const { addFolder } = useWorkspace();
 
 	const handleClick = (event: React.MouseEvent<HTMLElement> | any) => {
 		setAnchorEl(event.currentTarget);
@@ -153,7 +159,7 @@ export default function AddButton() {
 			>
 				<MenuItem onClick={handleOpenDialogText} disableRipple>
 					<NoteAddIcon />
-					Create Note
+					Crear carpeta
 				</MenuItem>
 				<MenuItem onClick={handleOpenDialogFile} disableRipple>
 					<AttachFileIcon />
@@ -162,9 +168,50 @@ export default function AddButton() {
 			</StyledMenu>
 
 			<Dialog open={dialogOpen} onClose={handleClose}>
-				<DialogTitle>CREATE NOTE</DialogTitle>
-				<DialogContent>
-					<TextField
+				<DialogTitle>Crear carpeta</DialogTitle>
+				<Formik
+					initialValues={{
+						folderName: "",
+					}}
+					validate={(valores) => {
+						let errores: any = {};
+						console.log(valores.folderName);
+						//Validación contraseña
+						if (!valores.folderName) {
+							errores.folderName = "Por favor ingresa el nombre de tu carpeta";
+
+							return errores;
+						}
+					}}
+					onSubmit={async (valores, { resetForm }) => {
+						try {
+							addFolder(valores.folderName);
+						} catch (error) {
+							resetForm();
+						}
+					}}
+				>
+					{({ errors, handleChange, values }: any) => (
+						<Form>
+							<Field type="text" id="correo" name="folderName" />
+							<ErrorMessage
+								name="folderName"
+								component={() => (
+									<div className="error">{errors.folderName}</div>
+								)}
+							/>
+							<DialogActions>
+								<Button variant="outlined" onClick={handleCloseDialogText}>
+									Cancelar
+								</Button>
+								<LoadingButton variant="outlined" type="submit">
+									Submit
+								</LoadingButton>
+							</DialogActions>
+						</Form>
+					)}
+				</Formik>
+				{/* <TextField
 						autoFocus
 						margin="dense"
 						id="name"
@@ -190,16 +237,7 @@ export default function AddButton() {
 						type="tag"
 						fullWidth
 						variant="outlined"
-					/>
-				</DialogContent>
-				<DialogActions>
-					<Button variant="outlined" onClick={handleCloseDialogText}>
-						CANCEL
-					</Button>
-					<Button variant="contained" onClick={handleClose}>
-						SUBMIT
-					</Button>
-				</DialogActions>
+					/> */}
 			</Dialog>
 
 			<Dialog open={dialogOpenFile} onClose={handleClose}>
