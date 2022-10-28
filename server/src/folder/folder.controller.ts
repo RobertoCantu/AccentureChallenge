@@ -1,5 +1,5 @@
 import { File, Folder } from '@prisma/client';
-import { Request, Response } from 'express';;
+import { Request, Response } from 'express';
 import * as FolderService from './folder.service';
 
 const validateFolderToUser = async (folderId: string, req: Request) => {
@@ -42,9 +42,16 @@ export const createFolderController = async (
         .catch((err) => err(res));
     if (!folder) return;
 
-    await FolderService.createFolder(name, req.user.id, parentId);
-
-    res.sendStatus(200);
+    try {
+        const folder = await FolderService.createFolder(
+            name,
+            req.user.id,
+            parentId
+        );
+        res.status(200).send(folder);
+    } catch (error) {
+        res.status(500).send(error);
+    }
 };
 
 export const getUserFoldersController = async (
@@ -57,7 +64,6 @@ export const getUserFoldersController = async (
 
     if (!parentId) {
         const rootFolder = await FolderService.getUserRootFolder(userId);
-
         return res.status(200).send(rootFolder ? [rootFolder] : []);
     }
 

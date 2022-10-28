@@ -87,13 +87,13 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 function AuthProvider({ children }: { children: ReactNode }) {
 	const [state, dispatch] = useReducer(AuthReducer, initialState);
-
+	// window.localStorage.removeItem('accessToken')
+	// window.localStorage.removeItem('user')
 	useEffect(() => {
 		const initialize = async () => {
 			const user = window.localStorage.getItem("user");
 
 			if (user) {
-				console.log("entrooooo");
 				dispatch({
 					type: Types.Initial,
 					payload: {

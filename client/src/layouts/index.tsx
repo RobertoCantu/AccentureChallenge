@@ -35,7 +35,8 @@ import { margin } from "@mui/system";
 import { ClassNames } from "@emotion/react";
 import TestNavBar from "./testNavBar";
 import TestSidebar from "./testSidebar";
-import { useFolder } from "../hooks/useFolder";
+// import { useFolder } from '../hooks/useFolder';
+import { useWorkspace } from "../hooks/useWorkspace";
 
 const RootStyle = styled("div")({
 	display: "flex",
@@ -64,9 +65,7 @@ const Offset = styled("div")(({ theme }) => theme.mixins.toolbar);
 export default function DashboardLayout() {
 	const theme = useTheme();
 	const pages = ["Inicio"];
-	const currentFolder = useFolder();
-	console.log(currentFolder);
-	//const { collapseClick } = useCollapseDrawer();
+	const workspace = useWorkspace();
 
 	return (
 		<Box sx={{ display: "flex" }}>
@@ -74,6 +73,23 @@ export default function DashboardLayout() {
 			<DashboardSidebar />
 			<MainStyle>
 				<Outlet />
+				<div>
+					hola
+					{workspace.folderItems?.folders.map((folder) => (
+						<button onClick={() => workspace.switchFolder(folder.id)}>
+							{folder.name}
+						</button>
+					))}
+					<button
+						onClick={() =>
+							workspace.addFolder(
+								"nuevo folder" + workspace.currentFolder?.name
+							)
+						}
+					>
+						Crear folder
+					</button>
+				</div>
 			</MainStyle>
 		</Box>
 	);

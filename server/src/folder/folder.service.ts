@@ -7,6 +7,30 @@ export const createFolder = async (
     userId: string,
     parentId: string | null
 ): Promise<Folder> => {
+    if (!parentId) {
+        const hasRoot =
+            (await db.folder.count({
+                where: {
+                    userId,
+                    parentId: null,
+                },
+            })) != 0;
+
+        if (hasRoot) throw new Error('User already has root folder.');
+    }
+
+    const folderAlreadyExist =
+        (await db.folder.count({
+            where: {
+                userId,
+                parentId,
+                name,
+            },
+        })) != 0;
+
+        
+    if (folderAlreadyExist) throw new Error('Folder with same name already exists');
+
     const created = await db.folder.create({
         data: {
             name,
@@ -45,7 +69,9 @@ export const getFolderItems = async (
         : null;
 };
 
-export const getUserRootFolder = async (userId: string): Promise<Folder | null> => {
+export const getUserRootFolder = async (
+    userId: string
+): Promise<Folder | null> => {
     const entry = await db.folder.findFirst({
         where: {
             userId,

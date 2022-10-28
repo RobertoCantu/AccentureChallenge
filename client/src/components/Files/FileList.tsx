@@ -4,13 +4,13 @@ import Box from "@mui/material/Box";
 import FileCard from "./FileCard";
 
 // Hooks
-import { useFolder } from "../../hooks/useFolder";
+import { useWorkspace } from "../../hooks/useWorkspace";
 
 function FileList() {
 	// File array
 	const files = [{ name: "File 1" }, { name: "File2" }];
 
-	const { error, currentFolder } = useFolder();
+	const { error, currentFolder } = useWorkspace();
 	console.log("errror", error);
 	console.log(currentFolder);
 

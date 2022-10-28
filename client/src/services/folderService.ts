@@ -10,9 +10,20 @@ export type FolderItems = {
     files: File[];
 };
 
-export async function getRootFolder(): Promise<Folder> {
+export async function geFolder(folderId?: string): Promise<Folder> {
+    if (!folderId)
+        return await axios
+            .get(`${FOLDER_API_PREFIX}/`, {
+                headers: {
+                    ...getAuthHeaders(),
+                },
+            })
+            .then((res) => {
+                if (res.status === 200) return res.data[0];
+                throw res.data;
+            });
     return await axios
-        .get(`${FOLDER_API_PREFIX}/`, {
+        .get(`${FOLDER_API_PREFIX}/${folderId}`, {
             headers: {
                 ...getAuthHeaders(),
             },
@@ -39,7 +50,7 @@ export async function getFolderObjects(folderId: string): Promise<FolderItems> {
 export async function createFolder(
     folderName: string,
     parentId: string
-): Promise<FolderItems> {
+): Promise<Folder> {
     return await axios
         .post(
             `${FOLDER_API_PREFIX}/`,
@@ -53,5 +64,6 @@ export async function createFolder(
         .then((res) => {
             if (res.status === 200) return res.data;
             throw res.data;
-        });
+        })
+        .catch(console.error);
 }
