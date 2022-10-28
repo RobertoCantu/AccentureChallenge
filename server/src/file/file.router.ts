@@ -21,7 +21,7 @@ fileRouter
 
 fileRouter
     .route('/:fileId')
-    .put(updateFileController)
+    .put(multerMiddleware.single('note'), updateFileController)
     .delete(deleteFileController);
 
 fileRouter.get('/resource/:fileId', getFileResourceController);
