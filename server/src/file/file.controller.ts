@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import { db } from '../utils/db.server';
 import { deleteObject, getObjectUrl } from '../utils/s3-utills';
 import * as FileService from './file.service';
-import { ReqQuery } from "../../@types/custom";
+import { ReqQuery } from '../../@types/custom';
 
 const validateFileToUser = async (fileId: string, req: Request) => {
     return new Promise(
@@ -128,7 +128,7 @@ export const deleteFileController = async (
 
 export const updateFileController = async (
     req: Request<{ fileId: string }, {}, Partial<File>>,
-    res: Response<File | string>
+    res: Response<File | string | unknown>
 ) => {
     if (!req.user) return res.sendStatus(400);
     const fileId = req.params.fileId;
@@ -147,9 +147,12 @@ export const updateFileController = async (
 
     if ('id' in updateData) delete updateData['id'];
 
-    await FileService.updateFile(fileId, updateData);
-
-    res.sendStatus(200);
+    try {
+        const updated = await FileService.updateFile(fileId, updateData);
+        res.status(200).send(updated);
+    } catch (error) {
+        res.status(500).send(error);
+    }
 };
 
 export const searchFilesController = async (
@@ -159,7 +162,7 @@ export const searchFilesController = async (
     if (!req.user) return res.sendStatus(400);
     const { fileName } = req.query;
 
-    if( fileName ) {
+    if (fileName) {
         const files = await FileService.getAllFiles(fileName as string);
         return res.status(200).json(files);
     }

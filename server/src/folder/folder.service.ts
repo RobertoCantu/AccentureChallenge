@@ -2,11 +2,24 @@ import { File, Folder } from '@prisma/client';
 import { db } from '../utils/db.server';
 import { deleteObject } from '../utils/s3-utills';
 
+const checkFolderAlreadyExists = async (parentId: string, name: string) => {
+    return (
+        (await db.folder.count({
+            where: {
+                parentId,
+                name,
+            },
+        })) != 0
+    );
+};
+
 export const createFolder = async (
     name: string,
     userId: string,
     parentId: string | null
 ): Promise<Folder> => {
+    if (!name || name.length == 0)
+        throw new Error(`Folder name can't be empty.`);
     if (!parentId) {
         const hasRoot =
             (await db.folder.count({
@@ -19,17 +32,8 @@ export const createFolder = async (
         if (hasRoot) throw new Error('User already has root folder.');
     }
 
-    const folderAlreadyExist =
-        (await db.folder.count({
-            where: {
-                userId,
-                parentId,
-                name,
-            },
-        })) != 0;
-
-        
-    if (folderAlreadyExist) throw new Error('Folder with same name already exists');
+    if (parentId && !(await checkFolderAlreadyExists(parentId, name)))
+        throw new Error('Folder with same name already exists');
 
     const created = await db.folder.create({
         data: {
@@ -140,6 +144,18 @@ export const updateFolder = async (
     folderId: string,
     data: Partial<Folder>
 ): Promise<Folder> => {
+    if (data.name && data.name.length == 0)
+        throw new Error(`Folder name can't be empty.`);
+
+    const origin = await db.folder.findUnique({
+        where: {
+            id: folderId,
+        },
+    });
+
+    if (origin?.parentId && data.name && !(await checkFolderAlreadyExists(origin.parentId, data.name)))
+        throw new Error('Folder with same name already exists');
+
     const created = await db.folder.update({
         where: {
             id: folderId,
