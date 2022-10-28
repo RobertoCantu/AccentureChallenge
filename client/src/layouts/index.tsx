@@ -73,7 +73,7 @@ export default function DashboardLayout() {
 			<DashboardSidebar />
 			<MainStyle>
 				<Outlet />
-				<div>
+				{/* <div>
 					hola
 					{workspace.folderItems?.folders.map((folder) => (
 						<button onClick={() => workspace.switchFolder(folder.id)}>
@@ -89,7 +89,7 @@ export default function DashboardLayout() {
 					>
 						Crear folder
 					</button>
-				</div>
+				</div> */}
 			</MainStyle>
 		</Box>
 	);

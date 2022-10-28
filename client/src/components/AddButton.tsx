@@ -11,8 +11,10 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import { DialogContentText } from "@mui/material";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+import { CardActionArea, CardContent, DialogContentText } from "@mui/material";
+import { Card } from "@mui/material";
+import { Grid, Box } from "@mui/material";
 
 const StyledMenu = styled((props: MenuProps) => (
 	<Menu
@@ -61,9 +63,9 @@ export default function AddButton() {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
 	const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [dialogOpenFile, setDialogOpenFile] = React.useState(false);
+	const [dialogOpenFile, setDialogOpenFile] = React.useState(false);
 
-	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+	const handleClick = (event: React.MouseEvent<HTMLElement> | any) => {
 		setAnchorEl(event.currentTarget);
 	};
 
@@ -73,16 +75,16 @@ export default function AddButton() {
 
 	const handleOpenDialogText = () => {
 		setAnchorEl(null);
-    setDialogOpen(true);
+		setDialogOpen(true);
 	};
 
 	const handleCloseDialogText = () => {
 		setDialogOpen(false);
 	};
 
-  const handleOpenDialogFile = () => {
+	const handleOpenDialogFile = () => {
 		setAnchorEl(null);
-    setDialogOpenFile(true);
+		setDialogOpenFile(true);
 	};
 
 	const handleCloseDialogFile = () => {
@@ -91,23 +93,55 @@ export default function AddButton() {
 
 	const somestyle = {
 		color: "red",
-		fontSize: "10px"
+		fontSize: "10px",
 	};
 
 	return (
-		<div>
-			<Button
-				id="demo-customized-button"
-				aria-controls={open ? "demo-customized-menu" : undefined}
-				aria-haspopup="true"
-				aria-expanded={open ? "true" : undefined}
-				variant="contained"
-				disableElevation
-				onClick={handleClick}
-				endIcon={<AddIcon />}
+		<>
+			{/* <Card
+				sx={{ maxWidth: 345, height: "100%" }}
+				style={{ backgroundColor: "#E8E8E8" }}
 			>
-				Add Note
-			</Button>
+				<CardActionArea>
+					<CardContent>
+						<Button
+							id="demo-customized-button"
+							aria-controls={open ? "demo-customized-menu" : undefined}
+							aria-haspopup="true"
+							aria-expanded={open ? "true" : undefined}
+							variant="contained"
+							disableElevation
+							onClick={handleClick}
+							endIcon={<AddIcon />}
+						>
+							Add Note
+						</Button>
+						<Grid
+							container
+							direction="row"
+							justifyContent="center"
+							alignContent="center"
+						>
+							<AddIcon fontSize="large" />
+						</Grid>
+					</CardContent>
+				</CardActionArea>
+			</Card> */}
+			<Grid
+				container
+				direction="row"
+				justifyContent="center"
+				alignContent="center"
+			>
+				<Box sx={{}}>
+					<AddIcon
+						onClick={handleClick}
+						fontSize="large"
+						sx={{ marginTop: "35px" }}
+					/>
+				</Box>
+			</Grid>
+
 			<StyledMenu
 				id="demo-customized-menu"
 				MenuListProps={{
@@ -168,7 +202,7 @@ export default function AddButton() {
 				</DialogActions>
 			</Dialog>
 
-      <Dialog open={dialogOpenFile} onClose={handleClose}>
+			<Dialog open={dialogOpenFile} onClose={handleClose}>
 				<DialogTitle>UPLOAD NOTE FILE</DialogTitle>
 				<DialogContent style={somestyle}>Just PDF files</DialogContent>
 				<DialogContent>
@@ -181,10 +215,11 @@ export default function AddButton() {
 						fullWidth
 						variant="outlined"
 					/>
-          <Button variant="contained" component="label" color="primary">
-            <FileUploadIcon/>Upload File
-            <input type="file" hidden accept="application/pdf"/>
-          </Button>
+					<Button variant="contained" component="label" color="primary">
+						<FileUploadIcon />
+						Upload File
+						<input type="file" hidden accept="application/pdf" />
+					</Button>
 					<TextField
 						autoFocus
 						margin="dense"
@@ -204,6 +239,6 @@ export default function AddButton() {
 					</Button>
 				</DialogActions>
 			</Dialog>
-		</div>
+		</>
 	);
 }
