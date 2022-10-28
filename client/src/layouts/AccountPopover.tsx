@@ -142,7 +142,7 @@ function AccountPopover() {
 						variant="outlined"
 						onClick={handleLogout}
 					>
-						Logout
+						Cerrar sesión
 					</Button>
 				</Box>
 			</MenuPopover>
