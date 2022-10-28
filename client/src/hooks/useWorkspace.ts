@@ -157,7 +157,7 @@ export const useWorkspace = (folderId?: string) => {
                     setError(null);
                 })
                 .catch((err) => setError(err))
-                .finally(() => setLoading(true));
+                .finally(() => setLoading(false));
         }
     }, [currentFolder, currentFolderId]);
 
@@ -176,7 +176,7 @@ export const useWorkspace = (folderId?: string) => {
                 setError(null);
             })
             .catch((err) => setError(err))
-            .finally(() => setLoading(true));
+            .finally(() => setLoading(false));
     }, [currentFolderId, folderItems]);
 
     return {
