@@ -54,8 +54,15 @@ export async function updateFile(
         .catch(console.error);
 }
 
-export async function getFileResource(fileId: string) {
+export async function getFileResource(fileId: string): Promise<string> {
     return axios.get(`${FILE_API_PREFIX}/resource/${fileId}`).then((res) => {
+        if (res.status === 200) return res.data.resourceUrl;
+        throw res.data.resourceUrl;
+    });
+}
+
+export async function deleteFile(fileId: string) {
+    return axios.delete(`${FILE_API_PREFIX}/${fileId}`).then((res) => {
         if (res.status === 200) return res.data;
         throw res.data.resourceUrl;
     });
