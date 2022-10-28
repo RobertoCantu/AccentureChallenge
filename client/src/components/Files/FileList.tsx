@@ -24,6 +24,7 @@ function FileList() {
 	};
 
 	useEffect(() => {
+		console.log("usee efect");
 		if (folderItems && loading) {
 			setCurrentFolderFiles(folderItems.files);
 			setCurrentFolderFolders(folderItems.folders);
@@ -33,6 +34,7 @@ function FileList() {
 	console.log("errror", error);
 	console.log("Soy el current folder", currentFolder);
 	console.log("Children", currentFolderFolders);
+	console.log("FOlder items", folderItems);
 
 	return (
 		<Box sx={{ flexGrow: 1 }}>

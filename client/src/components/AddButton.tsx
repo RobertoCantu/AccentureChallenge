@@ -69,7 +69,7 @@ export default function AddButton() {
 	const open = Boolean(anchorEl);
 	const [dialogOpen, setDialogOpen] = React.useState(false);
 	const [dialogOpenFile, setDialogOpenFile] = React.useState(false);
-	const { addFolder } = useWorkspace();
+	const { addFolder, addNote } = useWorkspace();
 
 	const handleClick = (event: React.MouseEvent<HTMLElement> | any) => {
 		setAnchorEl(event.currentTarget);
@@ -204,78 +204,92 @@ export default function AddButton() {
 								<Button variant="outlined" onClick={handleCloseDialogText}>
 									Cancelar
 								</Button>
-								<LoadingButton variant="outlined" type="submit">
+								<LoadingButton
+									variant="outlined"
+									type="submit"
+									onClick={handleCloseDialogText}
+								>
 									Submit
 								</LoadingButton>
 							</DialogActions>
 						</Form>
 					)}
 				</Formik>
-				{/* <TextField
-						autoFocus
-						margin="dense"
-						id="name"
-						label="Note Title"
-						type="title"
-						fullWidth
-						variant="outlined"
-					/>
-					<TextField
-						id="outlined-multiline-static"
-						margin="dense"
-						label="Note Content"
-						multiline
-						rows={5}
-						fullWidth
-						variant="outlined"
-					/>
-					<TextField
-						autoFocus
-						margin="dense"
-						id="name"
-						label="Tag"
-						type="tag"
-						fullWidth
-						variant="outlined"
-					/> */}
 			</Dialog>
 
 			<Dialog open={dialogOpenFile} onClose={handleClose}>
-				<DialogTitle>UPLOAD NOTE FILE</DialogTitle>
-				<DialogContent style={somestyle}>Just PDF files</DialogContent>
-				<DialogContent>
-					<TextField
-						autoFocus
-						margin="dense"
-						id="name"
-						label="Note Title"
-						type="title"
-						fullWidth
-						variant="outlined"
-					/>
-					<Button variant="contained" component="label" color="primary">
-						<FileUploadIcon />
-						Upload File
-						<input type="file" hidden accept="application/pdf" />
-					</Button>
-					<TextField
-						autoFocus
-						margin="dense"
-						id="name"
-						label="Tag"
-						type="tag"
-						fullWidth
-						variant="outlined"
-					/>
-				</DialogContent>
-				<DialogActions>
-					<Button variant="outlined" onClick={handleCloseDialogFile}>
-						CANCEL
-					</Button>
-					<Button variant="contained" onClick={handleClose}>
-						SUBMIT
-					</Button>
-				</DialogActions>
+				<DialogTitle>Subir archivo</DialogTitle>
+				<DialogContent style={somestyle}>Solo archivos pdf</DialogContent>
+				<Formik
+					initialValues={{
+						fileName: "",
+						file: File,
+					}}
+					validate={(valores) => {
+						let errores: any = {};
+						console.log(valores);
+						//Validación contraseña
+						if (!valores.fileName) {
+							errores.folderName = "Por favor ingresa el nombre de tu archvo";
+
+							return errores;
+						}
+					}}
+					onSubmit={async (valores, { resetForm }) => {
+						console.log("Valoreeees", valores);
+						try {
+							addNote(valores.fileName, valores.file);
+						} catch (error) {
+							resetForm();
+						}
+					}}
+				>
+					{({ errors, handleChange, values, setFieldValue }) => (
+						<Form>
+							<DialogContent>
+								<TextField
+									autoFocus
+									margin="dense"
+									id="fileName"
+									label="Note Title"
+									type="title"
+									fullWidth
+									variant="outlined"
+									onChange={handleChange}
+								/>
+								{/* <Button variant="contained" component="label" color="primary">
+									<FileUploadIcon />
+									Upload File
+									<input
+										type="file"
+										hidden
+										accept="application/pdf"
+										onChange={setFieldValue("file", (event: any) => {
+											return event.currentTarget.files[0];
+										})}
+									/>
+                  
+								</Button> */}
+								<input
+									id="file"
+									name="file"
+									type="file"
+									onChange={(event: any) => {
+										setFieldValue("file", event.currentTarget.files[0]);
+									}}
+								/>
+							</DialogContent>
+							<DialogActions>
+								<Button variant="outlined" onClick={handleCloseDialogFile}>
+									Cancelar
+								</Button>
+								<Button variant="contained" onClick={handleCloseDialogFile}>
+									Enviar
+								</Button>
+							</DialogActions>
+						</Form>
+					)}
+				</Formik>
 			</Dialog>
 		</>
 	);
