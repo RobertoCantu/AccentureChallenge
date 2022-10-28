@@ -7,6 +7,7 @@ import {
     getFileResourceController,
     getUserFilesController,
     updateFileController,
+    searchFilesController
 } from './file.controller';
 
 export const fileRouter = Router();
@@ -24,3 +25,6 @@ fileRouter
     .delete(deleteFileController);
 
 fileRouter.get('/resource/:fileId', getFileResourceController);
+
+fileRouter.get('/search', searchFilesController);
+

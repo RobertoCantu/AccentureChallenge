@@ -10,25 +10,26 @@ import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 
 interface CardType {
-	name: string;
+	name: string | undefined;
+	handleClick?: any;
 }
 
-function FileCard({ name }: CardType) {
+function FileCard({ name, handleClick }: CardType) {
 	return (
 		<Card sx={{ maxWidth: 345, height: "100%" }}>
 			<CardActionArea>
 				<CardContent>
-					<FolderIcon fontSize="large" />
+					<FolderIcon fontSize="large" onClick={handleClick} />
 					<Typography gutterBottom variant="h5" component="div">
 						{name}
 					</Typography>
 					<Grid container direction="row" justifyContent="flex-end">
-						<IconButton size="small" color="primary">
-							<EditIcon />
-						</IconButton>
-						<IconButton size="small" color="error">
-							<DeleteIcon />
-						</IconButton>
+						{/* <IconButton size="small" color="primary"> */}
+						<EditIcon fontSize="small" color="primary" />
+						{/* </IconButton> */}
+						{/* <IconButton size="small" color="error"> */}
+						<DeleteIcon fontSize="small" color="error" />
+						{/* </IconButton> */}
 					</Grid>
 				</CardContent>
 			</CardActionArea>

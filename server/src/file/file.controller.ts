@@ -3,6 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import { db } from '../utils/db.server';
 import { deleteObject, getObjectUrl } from '../utils/s3-utills';
 import * as FileService from './file.service';
+import { ReqQuery } from "../../@types/custom";
 
 const validateFileToUser = async (fileId: string, req: Request) => {
     return new Promise(
@@ -149,4 +150,18 @@ export const updateFileController = async (
     await FileService.updateFile(fileId, updateData);
 
     res.sendStatus(200);
+};
+
+export const searchFilesController = async (
+    req: Request<{ fileName: string }, {}, {}>,
+    res: Response<File[]>
+) => {
+    if (!req.user) return res.sendStatus(400);
+    const { fileName } = req.query;
+
+    if( fileName ) {
+        const files = await FileService.getAllFiles(fileName as string);
+        return res.status(200).json(files);
+    }
+    return res.sendStatus(400);
 };
