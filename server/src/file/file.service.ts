@@ -11,9 +11,8 @@ export const createFile = async (
     if (!name || name.length == 0) throw new Error(`File name can't be empty`);
 
     const fileAlreadyExist =
-        (await db.folder.count({
+        (await db.file.count({
             where: {
-                id: folderId,
                 name,
             },
         })) != 0;
@@ -65,8 +64,23 @@ export const updateFile = async (
         },
         select: {
             resourceUrl: true,
+            name: true
         },
     });
+
+    if (!origin) throw new Error(`File does not exist`);
+
+    if (data.name && data.name != origin.name) {
+        const fileAlreadyExist =
+            (await db.file.count({
+                where: {
+                    name: data.name,
+                },
+            })) != 0;
+
+        if (fileAlreadyExist)
+            throw new Error(`File ${data.name} already exists in folder.`);
+    }
 
     const created = await db.file.update({
         where: {
