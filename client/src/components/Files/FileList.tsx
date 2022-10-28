@@ -48,14 +48,15 @@ function FileList() {
 							<FileCard
 								name={file.name}
 								handleClick={() => handleFileSwitch(file.id)}
+								isFolder={true}
 							/>
 						</Grid>
 					);
 				})}
 				{currentFolderFiles.map((file: any, index: number) => {
 					return (
-						<Grid key={index} item xs={4}>
-							<FileCard name={file.name} />
+						<Grid key={index} item xs={3}>
+							<FileCard name={file.name} isFolder={false} />
 						</Grid>
 					);
 				})}

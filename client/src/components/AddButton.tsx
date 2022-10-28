@@ -229,11 +229,11 @@ export default function AddButton() {
 						let errores: any = {};
 						console.log(valores);
 						//Validación contraseña
-						if (!valores.fileName) {
-							errores.folderName = "Por favor ingresa el nombre de tu archvo";
+						// if (!valores.fileName) {
+						// 	errores.folderName = "Por favor ingresa el nombre de tu archvo";
 
-							return errores;
-						}
+						// 	return errores;
+						// }
 					}}
 					onSubmit={async (valores, { resetForm }) => {
 						console.log("Valoreeees", valores);
@@ -283,7 +283,11 @@ export default function AddButton() {
 								<Button variant="outlined" onClick={handleCloseDialogFile}>
 									Cancelar
 								</Button>
-								<Button variant="contained" onClick={handleCloseDialogFile}>
+								<Button
+									variant="contained"
+									onClick={handleCloseDialogFile}
+									type="submit"
+								>
 									Enviar
 								</Button>
 							</DialogActions>

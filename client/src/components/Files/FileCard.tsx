@@ -8,18 +8,24 @@ import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
+import FileOpenIcon from "@mui/icons-material/FileOpen";
 
 interface CardType {
 	name: string | undefined;
 	handleClick?: any;
+	isFolder: any;
 }
 
-function FileCard({ name, handleClick }: CardType) {
+function FileCard({ name, handleClick, isFolder }: CardType) {
 	return (
 		<Card sx={{ maxWidth: 345, height: "100%" }}>
 			<CardActionArea>
 				<CardContent>
-					<FolderIcon fontSize="large" onClick={handleClick} />
+					{isFolder ? (
+						<FolderIcon fontSize="large" onClick={handleClick} />
+					) : (
+						<FileOpenIcon fontSize="large" />
+					)}
 					<Typography gutterBottom variant="h5" component="div">
 						{name}
 					</Typography>
