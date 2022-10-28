@@ -6,6 +6,7 @@ import {
     geFolder,
     createFolder,
 } from '../services/folderService';
+import { createFile } from '../services/fileService';
 
 export type UseFolderValue = {
     switchFolder: (folderId: string) => void;
@@ -26,6 +27,21 @@ export const useWorkspace = (folderId?: string) => {
 
     const switchFolder = (folderId: string) => {
         setCurrentFolderId(folderId);
+    };
+
+    const addNote = (fileName: string, file: File) => {
+        if (!currentFolderId || !folderItems) return;
+
+        createFile(fileName, currentFolderId, file)
+            .then((newFile) => {
+                if (newFile) {
+                    setFolderItems({
+                        ...folderItems,
+                        files: [...folderItems.files, newFile],
+                    });
+                }
+            })
+            .catch(setError);                                          
     };
 
     const addFolder = (folderName: string) => {
@@ -88,6 +104,7 @@ export const useWorkspace = (folderId?: string) => {
     return {
         switchFolder,
         addFolder,
+        addNote,
         currentFolder,
         folderItems,
         loading,
