@@ -126,21 +126,27 @@ export const deleteFileController = async (
 };
 
 export const updateFileController = async (
-    req: Request<{ fileId: string }, {}, { file: Partial<File> }>,
+    req: Request<{ fileId: string }, {}, Partial<File>>,
     res: Response<File | string>
 ) => {
     if (!req.user) return res.sendStatus(400);
     const fileId = req.params.fileId;
+    const fileData = req.file as Express.MulterS3.File;
+    let updateData = { ...req.body };
+
+    if (fileData) {
+        const { key } = fileData;
+        updateData = { ...updateData, resourceUrl: key };
+    }
 
     const foundFile = await validateFileToUser(fileId, req)
         .then((file) => file)
         .catch((err) => err(res));
     if (!foundFile) return;
 
-    const file = req.body.file;
-    if ('id' in file) delete file['id'];
+    if ('id' in updateData) delete updateData['id'];
 
-    await FileService.updateFile(fileId, req.body.file);
+    await FileService.updateFile(fileId, updateData);
 
     res.sendStatus(200);
 };

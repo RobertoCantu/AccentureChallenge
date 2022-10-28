@@ -6,7 +6,8 @@ import {
     geFolder,
     createFolder,
 } from '../services/folderService';
-import { createFile } from '../services/fileService';
+import * as FileService from '../services/fileService';
+import { File as NoteFile } from '../@types/models';
 
 export type UseFolderValue = {
     switchFolder: (folderId: string) => void;
@@ -32,7 +33,7 @@ export const useWorkspace = (folderId?: string) => {
     const addNote = (fileName: string, file: File) => {
         if (!currentFolderId || !folderItems) return;
 
-        createFile(fileName, currentFolderId, file)
+        FileService.createFile(fileName, currentFolderId, file)
             .then((newFile) => {
                 if (newFile) {
                     setFolderItems({
@@ -41,7 +42,7 @@ export const useWorkspace = (folderId?: string) => {
                     });
                 }
             })
-            .catch(setError);                                          
+            .catch(setError);
     };
 
     const addFolder = (folderName: string) => {
@@ -58,6 +59,32 @@ export const useWorkspace = (folderId?: string) => {
                     console.error(
                         `Ya existe una carpeta con el nombre ${folderName}`
                     );
+                }
+            })
+            .catch(setError);
+    };
+
+    const updateNote = (
+        fileId: string,
+        updates: Partial<NoteFile>,
+        file: File
+    ) => {
+        if (!currentFolderId || !folderItems) return;
+
+        FileService.updateFile(fileId, updates, file)
+            .then((file) => {
+                if (file) {
+                    const fileItems = [...folderItems.files];
+                    const updateIdx = fileItems.findIndex(
+                        (file) => file.id === fileId
+                    );
+                    fileItems[updateIdx] = file;
+                    setFolderItems({
+                        ...folderItems,
+                        files: fileItems,
+                    });
+                } else {
+                    console.error('Error al actualizar archivo');
                 }
             })
             .catch(setError);
@@ -105,6 +132,7 @@ export const useWorkspace = (folderId?: string) => {
         switchFolder,
         addFolder,
         addNote,
+        updateNote,
         currentFolder,
         folderItems,
         loading,
