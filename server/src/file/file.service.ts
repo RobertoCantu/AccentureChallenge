@@ -70,3 +70,16 @@ export const updateFile = async (
 
     return created;
 };
+
+export const getAllFiles = async (fileName: string): Promise<File[]> => {
+    const files = await db.file.findMany({
+        where: {
+            name: {
+              contains: fileName,
+              mode: 'insensitive',
+            },
+          },
+    });
+
+    return files;
+};
