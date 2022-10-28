@@ -6,14 +6,14 @@ import "./logreg.css";
 import useAuth from "../hooks/useAuth";
 
 const Formulario = () => {
-    const [formularioEnviado, cambiarFormularioEnviado] = useState(false);
+	const [formularioEnviado, cambiarFormularioEnviado] = useState(false);
 	// Context
 	const context = useAuth();
 	const { login } = context;
 
 	return (
 		<>
-			<h1>Login</h1>
+			<h1>Iniciar Sesión</h1>
 			<div className="contenedor">
 				<Formik
 					initialValues={{
