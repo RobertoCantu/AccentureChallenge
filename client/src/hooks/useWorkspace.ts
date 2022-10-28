@@ -5,9 +5,12 @@ import {
     getFolderObjects,
     geFolder,
     createFolder,
+    updateFolder as _updateFolder,
+    deleteFolder as _deleteFolder,
 } from '../services/folderService';
 import * as FileService from '../services/fileService';
 import { File as NoteFile } from '../@types/models';
+import { deleteWhere, updateWhere } from '../utils/lists';
 
 export type UseFolderValue = {
     switchFolder: (folderId: string) => void;
@@ -67,27 +70,75 @@ export const useWorkspace = (folderId?: string) => {
     const updateNote = (
         fileId: string,
         updates: Partial<NoteFile>,
-        file: File
+        file: File | undefined
     ) => {
         if (!currentFolderId || !folderItems) return;
 
         FileService.updateFile(fileId, updates, file)
             .then((file) => {
                 if (file) {
-                    const fileItems = [...folderItems.files];
-                    const updateIdx = fileItems.findIndex(
+                    const updated = updateWhere(
+                        folderItems.files,
+                        file,
                         (file) => file.id === fileId
                     );
-                    fileItems[updateIdx] = file;
                     setFolderItems({
                         ...folderItems,
-                        files: fileItems,
+                        files: updated,
                     });
                 } else {
                     console.error('Error al actualizar archivo');
                 }
             })
             .catch(setError);
+    };
+
+    const updateFolder = (folderId: string, updates: Partial<Folder>) => {
+        if (!currentFolderId || !folderItems) return;
+
+        _updateFolder(folderId, updates)
+            .then((folder) => {
+                if (folder) {
+                    setFolderItems({
+                        ...folderItems,
+                        folders: updateWhere(
+                            folderItems.folders,
+                            folder,
+                            (file) => file.id === folderId
+                        ),
+                    });
+                } else {
+                    console.error('Error al actualizar el folder');
+                }
+            })
+            .catch(setError);
+    };
+
+    const deleteNote = (fileId: string) => {
+        if (!currentFolderId || !folderItems) return;
+
+        FileService.deleteFile(fileId).then((_) => {
+            setFolderItems({
+                ...folderItems,
+                files: deleteWhere(
+                    folderItems.files,
+                    (file) => file.id === fileId
+                ),
+            });
+        });
+    };
+
+    const deleteFolder = (folderId: string) => {
+        if (!currentFolderId || !folderItems) return;
+        _deleteFolder(folderId).then((_) => {
+            setFolderItems({
+                ...folderItems,
+                folders: deleteWhere(
+                    folderItems.folders,
+                    (folder) => folder.id === folderId
+                ),
+            });
+        });
     };
 
     useEffect(() => {
@@ -133,6 +184,9 @@ export const useWorkspace = (folderId?: string) => {
         addFolder,
         addNote,
         updateNote,
+        updateFolder,
+        deleteNote,
+        deleteFolder,
         currentFolder,
         folderItems,
         loading,
